@@ -1,0 +1,23 @@
+﻿Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\Config]
+"FrequencyCorrectRate"=dword:00000003
+"PollAdjustFactor"=dword:00000001
+"SpikeWatchPeriod"=dword:00000002
+"HoldPeriod"=dword:00000005
+"MaxPollInterval"=dword:00000008
+"PhaseCorrectRate"=dword:00000001
+"MinPollInterval"=dword:00000006
+"UpdateInterval"=dword:00000064
+"MaxNegPhaseCorrection"=dword:ffffffff
+"MaxPosPhaseCorrection"=dword:ffffffff
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\Parameters]
+"NtpServer"="rocppmuspdc,0x01 socppmuspdc,0x02"
+"Type"="NTP"
+"Log"=dword:00000064
+"WriteLog"="True"
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\TimeProviders\NtpClient]
+"Enabled"=dword:00000001
+"SpecialPollInterval"=dword:0000003c
