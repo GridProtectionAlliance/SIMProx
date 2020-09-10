@@ -60,14 +60,14 @@ namespace ConfigurationSetupUtility.Screens
 
             try
             {
-                // Determine if the ProjectAlpha is installed in this folder (could be stand-alone debug application or service), we check exe
-                // instead of config file since config file can remain between installations. Since only the ProjectAlpha can be setup with a
-                // XML or web service configuration, we disable these radio buttons for ProjectAlpha Manager only installations.
-                string exeFileName = Directory.GetCurrentDirectory() + "\\ProjectAlpha.exe";
+                // Determine if the SAMI is installed in this folder (could be stand-alone debug application or service), we check exe
+                // instead of config file since config file can remain between installations. Since only the SAMI can be setup with a
+                // XML or web service configuration, we disable these radio buttons for SAMI Manager only installations.
+                string exeFileName = Directory.GetCurrentDirectory() + "\\SAMI.exe";
 
                 if (!File.Exists(exeFileName))
                 {
-                    // If the ProjectAlpha is not be installed user may have chosen to only install the ProjectAlpha Manager on this system,
+                    // If the SAMI is not be installed user may have chosen to only install the SAMI Manager on this system,
                     // so we disable the non-database options...
                     m_xmlRadioButton.IsEnabled = false;
                     m_webServiceRadioButton.IsEnabled = false;
@@ -75,7 +75,7 @@ namespace ConfigurationSetupUtility.Screens
             }
             catch
             {
-                // Not failing if we cannot determine if ProjectAlpha is available...
+                // Not failing if we cannot determine if SAMI is available...
             }
         }
 

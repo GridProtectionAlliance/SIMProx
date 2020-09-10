@@ -46,15 +46,15 @@ namespace ConfigurationSetupUtility
         public const CipherStrength CryptoStrength = CipherStrength.Aes256;
         public const string CipherLookupKey = "0679d9ae-aca5-4702-a3f5-604415096987";
 
-        public const string ApplicationExe = "ProjectAlpha.exe";
-        public const string ApplicationConfig = "ProjectAlpha.exe.config";
-        public const string Manager = "ProjectAlphaManager";
-        public const string ManagerExe = "ProjectAlphaManager.exe";
-        public const string ManagerConfig = "ProjectAlphaManager.exe.config";
-        public const string BaseSqliteConfig = "ProjectAlpha.db";
-        public readonly static string SqliteConfigv2 = "ProjectAlpha" + DatabaseVersionSuffix + ".db";
-        public const string SqliteSampleData = "ProjectAlpha-SampleDataSet.db";
-        public const string SqliteInitialData = "ProjectAlpha-InitialDataSet.db";
+        public const string ApplicationExe = "SAMI.exe";
+        public const string ApplicationConfig = "SAMI.exe.config";
+        public const string Manager = "SAMIManager";
+        public const string ManagerExe = "SAMIManager.exe";
+        public const string ManagerConfig = "SAMIManager.exe.config";
+        public const string BaseSqliteConfig = "SAMI.db";
+        public readonly static string SqliteConfigv2 = "SAMI" + DatabaseVersionSuffix + ".db";
+        public const string SqliteSampleData = "SAMI-SampleDataSet.db";
+        public const string SqliteInitialData = "SAMI-InitialDataSet.db";
 
         private readonly ErrorLogger m_errorLogger;
         private readonly Func<string> m_defaultErrorText;
@@ -82,26 +82,26 @@ namespace ConfigurationSetupUtility
             // When run from the installer the current directory may not be the directory where this application is running
             Directory.SetCurrentDirectory(FilePath.GetAbsolutePath(""));
 
-            // Attempt to create an event log source for the ProjectAlpha Manager for authentication logging. This needs to be done
-            // here since the CSU runs with administrative privileges and the ProjectAlpha Manager normally does not; also there is
+            // Attempt to create an event log source for the SAMI Manager for authentication logging. This needs to be done
+            // here since the CSU runs with administrative privileges and the SAMI Manager normally does not; also there is
             // a short system delay that exists before you can write to a new event log source after it is first created.
             try
             {
-                string applicationName = "ProjectAlpha";
+                string applicationName = "SAMI";
 
-                // Create the event log source based on defined application name for ProjectAlpha if it does not already exist
+                // Create the event log source based on defined application name for SAMI if it does not already exist
                 if (!EventLog.SourceExists(applicationName))
                     EventLog.CreateEventSource(applicationName, "Application");
 
-                applicationName = "ProjectAlpha Manager";
+                applicationName = "SAMI Manager";
 
-                // Create the event log source based on defined application name for ProjectAlpha Manager if it does not already exist
+                // Create the event log source based on defined application name for SAMI Manager if it does not already exist
                 if (!EventLog.SourceExists(applicationName))
                     EventLog.CreateEventSource(applicationName, "Application");
             }
             catch (Exception ex)
             {
-                m_errorLogger.Log(new InvalidOperationException(string.Format("Warning: failed to create or validate the event log source for the ProjectAlpha Manager: {0}", ex.Message), ex), false);
+                m_errorLogger.Log(new InvalidOperationException(string.Format("Warning: failed to create or validate the event log source for the SAMI Manager: {0}", ex.Message), ex), false);
             }
         }
 

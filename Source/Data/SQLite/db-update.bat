@@ -27,10 +27,10 @@ SETLOCAL EnableDelayedExpansion
 
 IF "%git%" == "" SET git=%PROGRAMFILES(X86)%\Git\cmd\git.exe
 
-SET db[1]=ProjectAlpha.db
-SET db[2]=ProjectAlpha-InitialDataSet.db
-SET db[3]=ProjectAlpha-SampleDataSet.db
-SET script[1]=ProjectAlpha.sql
+SET db[1]=SAMI.db
+SET db[2]=SAMI-InitialDataSet.db
+SET db[3]=SAMI-SampleDataSet.db
+SET script[1]=SAMI.sql
 SET script[2]=InitialDataSet.sql
 SET script[3]=SampleDataSet.sql
 

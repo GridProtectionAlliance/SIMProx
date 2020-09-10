@@ -10,9 +10,9 @@
         <StackPanel DockPanel.Dock="Bottom">
             <TextBlock Height="23" Text="Apply configuration changes to:" Margin="10" TextWrapping="Wrap" TextAlignment="Center" />
             <StackPanel HorizontalAlignment="Center" Width="220">
-                <CheckBox Content="ProjectAlpha Windows service" Height="16" IsChecked="True" HorizontalAlignment="Left" Checked="ProjectAlphaServiceCheckBox_Checked" Unchecked="ProjectAlphaServiceCheckBox_Unchecked" Name="m_ProjectAlphaServiceCheckBox" />
-                <CheckBox Content="ProjectAlpha Manager (local application)" Height="16" IsChecked="True" HorizontalAlignment="Left" Checked="ProjectAlphaManagerLocalCheckBox_Checked" Unchecked="ProjectAlphaManagerLocalCheckBox_Unchecked" Name="m_ProjectAlphaManagerLocalCheckBox" />
-                <CheckBox Content="ProjectAlpha Manager (web application)" Height="16" IsChecked="True" HorizontalAlignment="Left" Checked="ProjectAlphaManagerWebCheckBox_Checked" Unchecked="ProjectAlphaManagerWebCheckBox_Unchecked" Name="m_ProjectAlphaManagerWebCheckBox" />
+                <CheckBox Content="SAMI Windows service" Height="16" IsChecked="True" HorizontalAlignment="Left" Checked="SAMIServiceCheckBox_Checked" Unchecked="SAMIServiceCheckBox_Unchecked" Name="m_SAMIServiceCheckBox" />
+                <CheckBox Content="SAMI Manager (local application)" Height="16" IsChecked="True" HorizontalAlignment="Left" Checked="SAMIManagerLocalCheckBox_Checked" Unchecked="SAMIManagerLocalCheckBox_Unchecked" Name="m_SAMIManagerLocalCheckBox" />
+                <CheckBox Content="SAMI Manager (web application)" Height="16" IsChecked="True" HorizontalAlignment="Left" Checked="SAMIManagerWebCheckBox_Checked" Unchecked="SAMIManagerWebCheckBox_Unchecked" Name="m_SAMIManagerWebCheckBox" />
                 <Line Stretch="Fill"  Stroke="DarkGray" X2="1" Margin="0,10" Name="m_horizontalRule" />
                 <CheckBox Content="Setup / change primary historian" Height="16" HorizontalAlignment="Left" Checked="SetupHistorianCheckBox_Checked" Unchecked="SetupHistorianCheckBox_Unchecked" Name="m_setupHistorianCheckBox" />
             </StackPanel>

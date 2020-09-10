@@ -1,4 +1,4 @@
-USE ProjectAlpha
+USE SAMI
 GO
 
 INSERT INTO Node(Name, CompanyID, Description, Settings, MenuType, MenuData, Master, LoadOrder, Enabled) 

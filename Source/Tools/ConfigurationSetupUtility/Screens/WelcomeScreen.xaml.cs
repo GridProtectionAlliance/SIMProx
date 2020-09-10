@@ -154,7 +154,7 @@ namespace ConfigurationSetupUtility.Screens
                 m_state["64bit"] = args.Contains("-64bit", StringComparer.CurrentCultureIgnoreCase);
     
             if (installFlag)
-                m_welcomeMessageTextBlock.Text = "You now need to set up the ProjectAlpha configuration.\r\n";
+                m_welcomeMessageTextBlock.Text = "You now need to set up the SAMI configuration.\r\n";
             else
                 m_welcomeMessageTextBlock.Text = "";
 

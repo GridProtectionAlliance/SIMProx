@@ -309,7 +309,7 @@ namespace ConfigurationSetupUtility.Screens
                     m_postgresSetup.RolePassword = m_rolePasswordTextBox.SecurePassword;
                 }
 
-                m_databaseTextBox.Text = migrate ? "ProjectAlpha" + App.DatabaseVersionSuffix : "ProjectAlpha";
+                m_databaseTextBox.Text = migrate ? "SAMI" + App.DatabaseVersionSuffix : "SAMI";
 
                 // When using an existing database as-is, read existing connection settings out of the configuration file
                 string configFile = FilePath.GetAbsolutePath(App.ApplicationConfig);

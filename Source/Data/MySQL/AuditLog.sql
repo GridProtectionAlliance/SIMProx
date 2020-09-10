@@ -1,4 +1,4 @@
-USE ProjectAlpha;
+USE SAMI;
 
 DELIMITER $$
 

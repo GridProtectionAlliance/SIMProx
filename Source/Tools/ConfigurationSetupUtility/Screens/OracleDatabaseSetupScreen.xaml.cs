@@ -279,7 +279,7 @@ namespace ConfigurationSetupUtility.Screens
                     m_oracleSetup.SchemaPassword = m_schemaUserPasswordTextBox.Password;
                 }
 
-                m_schemaUserNameTextBox.Text = migrate ? "ProjectAlpha" + App.DatabaseVersionSuffix : "ProjectAlpha";
+                m_schemaUserNameTextBox.Text = migrate ? "SAMI" + App.DatabaseVersionSuffix : "SAMI";
 
                 // When using an existing database as-is, read existing connection settings out of the configuration file
                 string configFile = FilePath.GetAbsolutePath(App.ApplicationConfig);

@@ -191,7 +191,7 @@ namespace ConfigurationSetupUtility.Screens
                 else
                     m_newDatabaseWarning.Visibility = existingVisibility;
 
-                // *** For the ProjectAlpha, defaulting to SQLite...
+                // *** For the SAMI, defaulting to SQLite...
                 if (!m_state.ContainsKey("newDatabaseType"))
                     m_state.Add("newDatabaseType", "SQLite");
 
@@ -211,14 +211,14 @@ namespace ConfigurationSetupUtility.Screens
                 // schema update from a non-security enabled database so that we can request admin credentials for the first time...
                 if (migrate)
                 {
-                    object webManagerDir = Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\ProjectAlphaManagerServices", "Installation Path", null) ?? Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\ProjectAlphaManagerServices", "Installation Path", null);
+                    object webManagerDir = Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\SAMIManagerServices", "Installation Path", null) ?? Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\SAMIManagerServices", "Installation Path", null);
                     string configFile;
 
                     m_oldConnectionString = null;
                     m_oldDataProviderString = null;
 
-                    // Attempt to use the ProjectAlpha config file first
-                    configFile = Directory.GetCurrentDirectory() + "\\ProjectAlpha.exe.config";
+                    // Attempt to use the SAMI config file first
+                    configFile = Directory.GetCurrentDirectory() + "\\SAMI.exe.config";
 
                     if (File.Exists(configFile))
                     {
@@ -226,8 +226,8 @@ namespace ConfigurationSetupUtility.Screens
                     }
                     else
                     {
-                        // Attempt to use the ProjectAlpha Manager config file second
-                        configFile = Directory.GetCurrentDirectory() + "\\ProjectAlphaManager.exe.config";
+                        // Attempt to use the SAMI Manager config file second
+                        configFile = Directory.GetCurrentDirectory() + "\\SAMIManager.exe.config";
 
                         if (File.Exists(configFile))
                         {
@@ -235,7 +235,7 @@ namespace ConfigurationSetupUtility.Screens
                         }
                         else
                         {
-                            // Attempt to use the web based ProjectAlpha Manager config file as a last resort
+                            // Attempt to use the web based SAMI Manager config file as a last resort
                             if (webManagerDir != null)
                             {
                                 configFile = webManagerDir.ToString() + "\\Web.config";
@@ -366,7 +366,7 @@ namespace ConfigurationSetupUtility.Screens
             if (m_state != null)
                 m_state["newDatabaseType"] = "SQLite";
 
-            // *** For the ProjectAlpha, not defaulting to sample data enabled...
+            // *** For the SAMI, not defaulting to sample data enabled...
             //if (!m_sampleScriptChanged && m_sampleDataScriptCheckBox != null)
             //    m_sampleDataScriptCheckBox.IsChecked = true;
 

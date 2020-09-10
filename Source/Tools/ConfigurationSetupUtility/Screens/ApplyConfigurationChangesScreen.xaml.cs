@@ -156,7 +156,7 @@ namespace ConfigurationSetupUtility.Screens
         // Initializes the state keys to their default values.
         private void InitializeState()
         {
-            object webManagerDir = Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\ProjectAlphaManagerServices", "Installation Path", null) ?? Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\ProjectAlphaManagerServices", "Installation Path", null);
+            object webManagerDir = Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\SAMIManagerServices", "Installation Path", null) ?? Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\SAMIManagerServices", "Installation Path", null);
             bool managerOptionsEnabled = m_state["configurationType"].ToString() == "database";
             bool webManagerOptionEnabled = managerOptionsEnabled && (webManagerDir != null);
             bool existing = Convert.ToBoolean(m_state["existing"]);
@@ -185,22 +185,22 @@ namespace ConfigurationSetupUtility.Screens
             }
 
             // Enable or disable the options based on whether those options are available for the current configuration.
-            m_ProjectAlphaManagerLocalCheckBox.IsEnabled = managerOptionsEnabled;
-            m_ProjectAlphaManagerWebCheckBox.IsEnabled = webManagerOptionEnabled;
+            m_SAMIManagerLocalCheckBox.IsEnabled = managerOptionsEnabled;
+            m_SAMIManagerWebCheckBox.IsEnabled = webManagerOptionEnabled;
 
             // If the options are disabled, they must also be unchecked.
             if (!managerOptionsEnabled)
-                m_ProjectAlphaManagerLocalCheckBox.IsChecked = false;
+                m_SAMIManagerLocalCheckBox.IsChecked = false;
 
             if (!webManagerOptionEnabled)
-                m_ProjectAlphaManagerWebCheckBox.IsChecked = false;
+                m_SAMIManagerWebCheckBox.IsChecked = false;
 
             m_setupHistorianCheckBox.IsChecked = false;
 
             // Set up the state object with the proper initial values.
-            m_state["applyChangesToService"] = m_ProjectAlphaServiceCheckBox.IsChecked.GetValueOrDefault();
-            m_state["applyChangesToLocalManager"] = m_ProjectAlphaManagerLocalCheckBox.IsChecked.GetValueOrDefault();
-            m_state["applyChangesToWebManager"] = m_ProjectAlphaManagerWebCheckBox.IsChecked.GetValueOrDefault();
+            m_state["applyChangesToService"] = m_SAMIServiceCheckBox.IsChecked.GetValueOrDefault();
+            m_state["applyChangesToLocalManager"] = m_SAMIManagerLocalCheckBox.IsChecked.GetValueOrDefault();
+            m_state["applyChangesToWebManager"] = m_SAMIManagerWebCheckBox.IsChecked.GetValueOrDefault();
             //m_state["setupHistorian"] = initialDataScript;
             //m_setupHistorianCheckBox.Visibility = (Convert.ToBoolean(m_state["setupHistorian"]) ? Visibility.Visible : Visibility.Collapsed);
 
@@ -211,43 +211,43 @@ namespace ConfigurationSetupUtility.Screens
             m_horizontalRule.Visibility = m_setupHistorianCheckBox.Visibility;
         }
 
-        // Occurs when the user chooses to apply changes to the ProjectAlpha service.
-        private void ProjectAlphaServiceCheckBox_Checked(object sender, RoutedEventArgs e)
+        // Occurs when the user chooses to apply changes to the SAMI service.
+        private void SAMIServiceCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             if (m_state != null)
                 m_state["applyChangesToService"] = true;
         }
 
-        // Occurs when the user chooses to not apply changes to the ProjectAlpha service.
-        private void ProjectAlphaServiceCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        // Occurs when the user chooses to not apply changes to the SAMI service.
+        private void SAMIServiceCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             if (m_state != null)
                 m_state["applyChangesToService"] = false;
         }
 
-        // Occurs when the user chooses to changes to the local ProjectAlpha Manager application.
-        private void ProjectAlphaManagerLocalCheckBox_Checked(object sender, RoutedEventArgs e)
+        // Occurs when the user chooses to changes to the local SAMI Manager application.
+        private void SAMIManagerLocalCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             if (m_state != null)
                 m_state["applyChangesToLocalManager"] = true;
         }
 
-        // Occurs when the user chooses to not apply changes to the local ProjectAlpha Manager application.
-        private void ProjectAlphaManagerLocalCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        // Occurs when the user chooses to not apply changes to the local SAMI Manager application.
+        private void SAMIManagerLocalCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             if (m_state != null)
                 m_state["applyChangesToLocalManager"] = false;
         }
 
-        // Occurs when the user chooses to apply changes to the ProjectAlpha Manager web application.
-        private void ProjectAlphaManagerWebCheckBox_Checked(object sender, RoutedEventArgs e)
+        // Occurs when the user chooses to apply changes to the SAMI Manager web application.
+        private void SAMIManagerWebCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             if (m_state != null)
                 m_state["applyChangesToWebManager"] = true;
         }
 
-        // Occurs when the user chooses to not apply changes to the ProjectAlpha Manager web application.
-        private void ProjectAlphaManagerWebCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        // Occurs when the user chooses to not apply changes to the SAMI Manager web application.
+        private void SAMIManagerWebCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             if (m_state != null)
                 m_state["applyChangesToWebManager"] = false;

@@ -362,7 +362,7 @@ namespace ConfigurationSetupUtility
                         else
                         {
                             if (trimLine.StartsWith("CREATE DATABASE") || trimLine.StartsWith("ALTER DATABASE") || trimLine.StartsWith("USE"))
-                                line = line.Replace("ProjectAlpha", DatabaseName);
+                                line = line.Replace("SAMI", DatabaseName);
 
                             // Append this line to the statement
                             statementBuilder.Append(line);
