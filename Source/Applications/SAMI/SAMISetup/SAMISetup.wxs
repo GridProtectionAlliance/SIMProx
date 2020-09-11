@@ -24,7 +24,6 @@
         <ComponentGroupRef Id="SQLServerScriptComponents" />
         <ComponentGroupRef Id="SQLiteScriptComponents" />
         <ComponentRef Id="makecert"/>
-        <ComponentRef Id="Sample1344"/>
       </Feature>
 
       <!-- SAMI Manager -->
@@ -258,6 +257,9 @@
       </Component>
       <Component Id="SerializedSchema">
         <File Id="SerializedSchema.bin" Name="SerializedSchema.bin" Source="$(var.SolutionDir)\Data\SerializedSchema.bin" />
+      </Component>
+      <Component Id="SAMIConfigFile">
+        <File Id="sami.xml" Name="sami.xml" Source="$(var.SAMI.ProjectDir)\sami.xml" />
       </Component>
     </ComponentGroup>
 
