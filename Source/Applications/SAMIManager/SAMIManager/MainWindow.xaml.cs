@@ -21,6 +21,11 @@
 //
 //******************************************************************************************************
 
+using GSF.Configuration;
+using GSF.IO;
+using GSF.Reflection;
+using GSF.TimeSeries.UI;
+using GSF.TimeSeries.UI.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,12 +37,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Xml;
 using System.Xml.Serialization;
-using GSF.Configuration;
-using GSF.IO;
-using GSF.Reflection;
-using GSF.Security;
-using GSF.TimeSeries.UI;
-using GSF.TimeSeries.UI.DataModels;
 
 namespace SAMIManager
 {
@@ -47,24 +46,15 @@ namespace SAMIManager
     public partial class MainWindow : ResizableWindow
     {
         #region [ Members ]
-
-        // Fields
-        private ObservableCollection<MenuDataItem> m_menuDataItems;
         private WindowsServiceClient m_windowsServiceClient;
-        private AlarmMonitor m_alarmMonitor;
-        private string m_defaultNodeID;
+        //private AlarmMonitor m_alarmMonitor;
+        private readonly string m_defaultNodeID;
 
         #endregion
 
         #region [ Properties ]
 
-        public ObservableCollection<MenuDataItem> MenuDataItems
-        {
-            get
-            {
-                return m_menuDataItems;
-            }
-        }
+        public ObservableCollection<MenuDataItem> MenuDataItems { get; private set; }
 
         #endregion
 
@@ -104,7 +94,7 @@ namespace SAMIManager
         {
             try
             {
-                Dispatcher.Invoke((Action)delegate()
+                Dispatcher?.Invoke(delegate
                 {
                     if (ComboboxNode.SelectedItem == null)
                     {
@@ -146,10 +136,10 @@ namespace SAMIManager
 
             using (XmlReader reader = XmlReader.Create(FilePath.GetAbsolutePath("Menu.xml")))
             {
-                m_menuDataItems = (ObservableCollection<MenuDataItem>)serializer.Deserialize(reader);
+                MenuDataItems = (ObservableCollection<MenuDataItem>)serializer.Deserialize(reader);
             }
 
-            MenuMain.DataContext = m_menuDataItems;
+            MenuMain.DataContext = MenuDataItems;
 
             // Populate Node Dropdown
             Dictionary<Guid, string> nodesList = Node.GetLookupList(null);
@@ -171,9 +161,9 @@ namespace SAMIManager
                     ComboboxNode.SelectedIndex = 0;
             }
 
-            // Create alarm monitor as singleton
-            m_alarmMonitor = new AlarmMonitor(true);
-            m_alarmMonitor.Start();
+            //// Create alarm monitor as singleton
+            //m_alarmMonitor = new AlarmMonitor(true);
+            //m_alarmMonitor.Start();
 
             IsolatedStorageManager.InitializeIsolatedStorage(false);
         }
@@ -189,7 +179,7 @@ namespace SAMIManager
             {
                 Properties.Settings.Default.Save();
                 CommonFunctions.SetRetryServiceConnection(false);
-                m_alarmMonitor.Dispose();
+                //m_alarmMonitor.Dispose();
                 Application.Current.Shutdown();
             }
             catch (NullReferenceException)
@@ -208,12 +198,12 @@ namespace SAMIManager
         /// </summary>
         /// <param name="sender">Source of the event.</param>
         /// <param name="e">Event argument.</param>
-        private void ComboboxNode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void ComboboxNode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if ((object)ComboboxNode.SelectedItem != null)
                 ((App)Application.Current).NodeID = ((KeyValuePair<Guid, string>)ComboboxNode.SelectedItem).Key;
 
-            m_menuDataItems[0].Command.Execute(null);
+            MenuDataItems[0].Command.Execute(null);
         }
 
         private void ConnectToService()
@@ -233,7 +223,7 @@ namespace SAMIManager
 
                 if (m_windowsServiceClient.Helper.RemotingClient.CurrentState == GSF.Communication.ClientState.Connected)
                 {
-                    EllipseConnectionState.Dispatcher.BeginInvoke((Action)delegate()
+                    EllipseConnectionState.Dispatcher?.BeginInvoke((Action)delegate
                     {
                         EllipseConnectionState.Fill = Application.Current.Resources["GreenRadialGradientBrush"] as RadialGradientBrush;
                         ToolTipService.SetToolTip(EllipseConnectionState, "Connected to the service");
@@ -241,7 +231,7 @@ namespace SAMIManager
                 }
                 else
                 {
-                    EllipseConnectionState.Dispatcher.BeginInvoke((Action)delegate()
+                    EllipseConnectionState.Dispatcher?.BeginInvoke((Action)delegate
                     {
                         EllipseConnectionState.Fill = Application.Current.Resources["RedRadialGradientBrush"] as RadialGradientBrush;
                         ToolTipService.SetToolTip(EllipseConnectionState, "Disconnected from the service");
@@ -252,7 +242,7 @@ namespace SAMIManager
 
         private void RemotingClient_ConnectionTerminated(object sender, EventArgs e)
         {
-            EllipseConnectionState.Dispatcher.BeginInvoke((Action)delegate()
+            EllipseConnectionState.Dispatcher?.BeginInvoke((Action)delegate
             {
                 EllipseConnectionState.Fill = Application.Current.Resources["RedRadialGradientBrush"] as RadialGradientBrush;
                 ToolTipService.SetToolTip(EllipseConnectionState, "Disconnected from the service");
@@ -261,7 +251,7 @@ namespace SAMIManager
 
         private void RemotingClient_ConnectionEstablished(object sender, EventArgs e)
         {
-            EllipseConnectionState.Dispatcher.BeginInvoke((Action)delegate()
+            EllipseConnectionState.Dispatcher?.BeginInvoke((Action)delegate
             {
                 EllipseConnectionState.Fill = Application.Current.Resources["GreenRadialGradientBrush"] as RadialGradientBrush;
                 ToolTipService.SetToolTip(EllipseConnectionState, "Connected to the service");
@@ -293,7 +283,7 @@ namespace SAMIManager
                 Dns.GetHostEntry("github.com");
 
                 // Launch the help page available on web.
-                Process.Start("https://github.com/GridProtectionAlliance/sami");
+                Process.Start("https://github.com/GridProtectionAlliance/projectalpha");
             }
             catch
             {

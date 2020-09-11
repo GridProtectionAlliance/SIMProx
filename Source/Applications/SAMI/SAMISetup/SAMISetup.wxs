@@ -66,10 +66,6 @@
         <Feature Id="NoInetFixUtilFeature" Title="No-Internet Fix Utility">
           <ComponentRef Id="NoInetFixUtil" />
         </Feature>
-        <Feature Id="DNP3ConfigGeneratorFeature" Title="DNP3 Configuration Generator">
-          <ComponentRef Id="DNP3ConfigGenerator" />
-        </Feature>
-
         
         <ComponentGroupRef Id="GSFDependencyComponents" />
       </Feature>
@@ -107,7 +103,7 @@
 
     <Property Id="SERVICENAME" Value="$(var.SAMI.TargetName)" />
     <Property Id="SERVICEPASSWORD" Hidden="yes" />
-    <Property Id="HTTPSERVICEPORTS" Value="6057,6058,6157,6158,6357,6457,5021" />
+    <Property Id="HTTPSERVICEPORTS" Value="6358" />
     <Property Id="COMPANYNAME" Value="Grid Protection Alliance" />
     <Property Id="COMPANYACRONYM" Value="GPA" />
     <SetProperty Id="SERVICEACCOUNT" Value="NT SERVICE\[SERVICENAME]" After="LaunchConditions" Sequence="first" />
@@ -218,11 +214,6 @@
         <File Id="makecert.exe" Name="makecert.exe" Source="$(var.ProjectDir)\makecert.exe" />
       </Component>
       
-      <!-- Sample Data -->
-      <Component Id="Sample1344">
-        <File Id="Sample1344.PmuCapture" Name="Sample1344.PmuCapture" Source="$(var.SAMI.ProjectDir)\Sample1344.PmuCapture" />
-      </Component>
-      
       <!-- Registry Settings -->
       <Component Id="Registry" Guid="{F74C123C-C923-4B04-813B-05E81397C764}">
         <RegistryKey Id="REG_GridProtectionAlliance" Root="HKLM" Key="SOFTWARE\Grid Protection Alliance" ForceCreateOnInstall="yes">
@@ -264,15 +255,6 @@
       </Component>
       <Component Id="DataMigrationUtilityConfig">
         <File Id="DataMigrationUtility.exe.config" Name="DataMigrationUtility.exe.config" Source="$(var.ProjectDir)\DataMigrationUtility.exe.config" />
-      </Component>
-      <Component Id="StatHistorianReportGenerator">
-        <File Id="StatHistorianReportGenerator.exe" Name="StatHistorianReportGenerator.exe" Source="$(var.ProjectDir)\StatHistorianReportGenerator.exe" />
-      </Component>
-      <Component Id="StatHistorianReportGeneratorConfig">
-        <File Id="StatHistorianReportGenerator.exe.config" Name="StatHistorianReportGenerator.exe.config" Source="$(var.ProjectDir)\StatHistorianReportGenerator.exe.config" />
-      </Component>
-      <Component Id="Reports">
-        <File Id="Reports.dll" Name="Reports.dll" Source="$(var.SolutionDir)\Dependencies\GSF\Reports.dll" />
       </Component>
       <Component Id="SerializedSchema">
         <File Id="SerializedSchema.bin" Name="SerializedSchema.bin" Source="$(var.SolutionDir)\Data\SerializedSchema.bin" />
@@ -319,10 +301,6 @@
       <Component Id="NoInetFixUtil">
         <File Id="NoInetFixUtil.exe" Name="NoInetFixUtil.exe" Source="$(var.ProjectDir)\NoInetFixUtil.exe" />
         <Shortcut Id="NoInetFixUtilStartMenuShortcut" Name="No-Internet Fix Utility" Icon="NoInetFixUtil.ico.exe" Description="Tool used to fix long timeouts on systems with no internet access available." WorkingDirectory="INSTALLFOLDER" Directory="ApplicationProgramsFolder" Advertise="yes" />
-      </Component>
-
-      <Component Id="DNP3ConfigGenerator">
-        <File Id="DNP3ConfigGenerator.exe" Name="DNP3ConfigGenerator.exe" Source="$(var.ProjectDir)\DNP3ConfigGenerator.exe" />
       </Component>
 
     </ComponentGroup>
@@ -399,41 +377,14 @@
       <Component Id="AdoAdapters">
         <File Id="AdoAdapters.dll" Name="AdoAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\AdoAdapters.dll" />
       </Component>
-      <Component Id="ArchivistAdapters">
-        <File Id="ArchivistAdapters.dll" Name="ArchivistAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\ArchivistAdapters.dll" />
-      </Component>
-      <Component Id="ArchivistClient">
-        <File Id="ArchivistClient.dll" Name="ArchivistClient.dll" Source="$(var.SolutionDir)\Dependencies\GSF\ArchivistClient.dll" />
-      </Component>
-      <Component Id="AudioAdapters">
-        <File Id="AudioAdapters.dll" Name="AudioAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\AudioAdapters.dll" />
-      </Component>
       <Component Id="Ciloci.Flee">
         <File Id="Ciloci.Flee.dll" Name="Ciloci.Flee.dll" Source="$(var.SolutionDir)\Dependencies\GSF\Ciloci.Flee.dll" />
-      </Component>
-      <Component Id="COMTRADEAdapters">
-        <File Id="COMTRADEAdapters.dll" Name="COMTRADEAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\COMTRADEAdapters.dll" />
-      </Component>
-      <Component Id="CsvAdapters">
-        <File Id="CsvAdapters.dll" Name="CsvAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\CsvAdapters.dll" />
       </Component>
       <Component Id="DataQualityMonitoring">
         <File Id="DataQualityMonitoring.dll" Name="DataQualityMonitoring.dll" Source="$(var.SolutionDir)\Dependencies\GSF\DataQualityMonitoring.dll" />
       </Component>
-      <Component Id="Dnp3Adapters">
-        <File Id="Dnp3Adapters.dll" Name="Dnp3Adapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\Dnp3Adapters.dll" />
-      </Component>
-      <Component Id="DNP3CLRAdapter">
-        <File Id="DNP3CLRAdapter.dll" Name="DNP3CLRAdapter.dll" Source="$(var.SolutionDir)\Dependencies\GSF\DNP3CLRAdapter.dll" />
-      </Component>
-      <Component Id="DNP3CLRInterface">
-        <File Id="DNP3CLRInterface.dll" Name="DNP3CLRInterface.dll" Source="$(var.SolutionDir)\Dependencies\GSF\DNP3CLRInterface.dll" />
-      </Component>
       <Component Id="DynamicCalculator">
         <File Id="DynamicCalculator.dll" Name="DynamicCalculator.dll" Source="$(var.SolutionDir)\Dependencies\GSF\DynamicCalculator.dll" />
-      </Component>
-      <Component Id="EpriExport">
-        <File Id="EpriExport.dll" Name="EpriExport.dll" Source="$(var.SolutionDir)\Dependencies\GSF\EpriExport.dll" />
       </Component>
       <Component Id="FileAdapters">
         <File Id="FileAdapters.dll" Name="FileAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\FileAdapters.dll" />
@@ -441,65 +392,17 @@
       <Component Id="FtpAdapters">
         <File Id="FtpAdapters.dll" Name="FtpAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\FtpAdapters.dll" />
       </Component>
-      <Component Id="Google.ProtocolBuffers">
-        <File Id="Google.ProtocolBuffers.dll" Name="Google.ProtocolBuffers.dll" Source="$(var.SolutionDir)\Dependencies\GSF\Google.ProtocolBuffers.dll" />
-      </Component>
       <Component Id="GrafanaAdapters">
         <File Id="GrafanaAdapters.dll" Name="GrafanaAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\GrafanaAdapters.dll" />
-      </Component>
-      <Component Id="Hadoop.Replication">
-        <File Id="Hadoop.Replication.dll" Name="Hadoop.Replication.dll" Source="$(var.SolutionDir)\Dependencies\GSF\Hadoop.Replication.dll" />
       </Component>
       <Component Id="HistorianAdapters">
         <File Id="HistorianAdapters.dll" Name="HistorianAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\HistorianAdapters.dll" />
       </Component>
-      <Component Id="ICCPExport">
-        <File Id="ICCPExport.dll" Name="ICCPExport.dll" Source="$(var.SolutionDir)\Dependencies\GSF\ICCPExport.dll" />
-      </Component>
-      <Component Id="InfluxDBAdapters">
-        <File Id="InfluxDBAdapters.dll" Name="InfluxDBAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\InfluxDBAdapters.dll" />
-      </Component>
-      <Component Id="NAudio"> <!-- Dependency for AudioAdapters -->
-        <File Id="NAudio.dll" Name="NAudio.dll" Source="$(var.SolutionDir)\Dependencies\GSF\NAudio.dll" />
-      </Component>
-      <Component Id="MongoAdapters">
-        <File Id="MongoAdapters.dll" Name="MongoAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\MongoAdapters.dll" />
-      </Component>
-      <Component Id="MongoDB">
-        <File Id="MongoDB.dll" Name="MongoDB.dll" Source="$(var.SolutionDir)\Dependencies\GSF\MongoDB.dll" />
-      </Component>
-      <Component Id="MongoDB.GridFS">
-        <File Id="MongoDB.GridFS.dll" Name="MongoDB.GridFS.dll" Source="$(var.SolutionDir)\Dependencies\GSF\MongoDB.GridFS.dll" />
-      </Component>
-      <Component Id="MySqlAdapters">
-        <File Id="MySqlAdapters.dll" Name="MySqlAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\MySqlAdapters.dll" />
-      </Component>
-      <Component Id="OneSecondFrequencyAverager">
-        <File Id="OneSecondFrequencyAverager.dll" Name="OneSecondFrequencyAverager.dll" Source="$(var.SolutionDir)\Dependencies\GSF\OneSecondFrequencyAverager.dll" />
-      </Component>
       <Component Id="PhasorProtocolAdapters">
         <File Id="PhasorProtocolAdapters.dll" Name="PhasorProtocolAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\PhasorProtocolAdapters.dll" />
       </Component>
-      <Component Id="PIAdapters"> <!-- OSI-PI Historian Adapters -->
-        <File Id="PIAdapters.dll" Name="PIAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\PIAdapters.dll" />
-      </Component>
-      <Component Id="PowerCalculations">
-        <File Id="PowerCalculations.dll" Name="PowerCalculations.dll" Source="$(var.SolutionDir)\Dependencies\GSF\PowerCalculations.dll" />
-      </Component>
       <Component Id="TestingAdapters">
         <File Id="TestingAdapters.dll" Name="TestingAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\TestingAdapters.dll" />
-      </Component>
-      <Component Id="WavInputAdapter">
-        <File Id="WavInputAdapter.dll" Name="WavInputAdapter.dll" Source="$(var.SolutionDir)\Dependencies\GSF\WavInputAdapter.dll" />
-      </Component>
-      <Component Id="AzureEventHubAdapters">
-        <File Id="AzureEventHubAdapters.dll" Name="AzureEventHubAdapters.dll" Source="$(var.SolutionDir)\Dependencies\GSF\AzureEventHubAdapters.dll" />
-      </Component>
-      <Component Id="Microsoft.Azure.Amqp">
-        <File Id="Microsoft.Azure.Amqp.dll" Name="Microsoft.Azure.Amqp.dll" Source="$(var.SolutionDir)\Dependencies\GSF\Microsoft.Azure.Amqp.dll" />
-      </Component>
-      <Component Id="Microsoft.Azure.EventHubs">
-        <File Id="Microsoft.Azure.EventHubs.dll" Name="Microsoft.Azure.EventHubs.dll" Source="$(var.SolutionDir)\Dependencies\GSF\Microsoft.Azure.EventHubs.dll" />
       </Component>
     </ComponentGroup>
 

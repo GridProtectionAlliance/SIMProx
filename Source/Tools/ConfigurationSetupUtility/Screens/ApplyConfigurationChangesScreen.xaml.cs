@@ -21,10 +21,10 @@
 //
 //******************************************************************************************************
 
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using Microsoft.Win32;
 
 namespace ConfigurationSetupUtility.Screens
 {
@@ -202,11 +202,10 @@ namespace ConfigurationSetupUtility.Screens
             m_state["applyChangesToLocalManager"] = m_SAMIManagerLocalCheckBox.IsChecked.GetValueOrDefault();
             m_state["applyChangesToWebManager"] = m_SAMIManagerWebCheckBox.IsChecked.GetValueOrDefault();
             //m_state["setupHistorian"] = initialDataScript;
-            //m_setupHistorianCheckBox.Visibility = (Convert.ToBoolean(m_state["setupHistorian"]) ? Visibility.Visible : Visibility.Collapsed);
 
-            //Replaced above two lines with two lines below because initialDataScript should only be used for visibility of checkbox.
             m_state["setupHistorian"] = (bool)m_setupHistorianCheckBox.IsChecked;
-            m_setupHistorianCheckBox.Visibility = initialDataScript ? Visibility.Visible : Visibility.Collapsed;
+            m_setupHistorianCheckBox.Visibility = Visibility.Collapsed;
+            m_SAMIManagerWebCheckBox.Visibility = Visibility.Collapsed;
 
             m_horizontalRule.Visibility = m_setupHistorianCheckBox.Visibility;
         }

@@ -22,34 +22,23 @@
 //       Remembers the last graph selection. 
 //******************************************************************************************************
 
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Threading;
-using System.Xml;
-using System.Xml.Serialization;
 using GSF;
 using GSF.Communication;
 using GSF.Data;
 using GSF.Identity;
 using GSF.IO;
-using GSF.PhasorProtocols.UI.DataModels;
 using GSF.Reflection;
 using GSF.ServiceProcess;
-using GSF.TimeSeries;
-using GSF.TimeSeries.Transport;
 using GSF.TimeSeries.UI;
-using Microsoft.Research.DynamicDataDisplay;
-using Microsoft.Research.DynamicDataDisplay.Charts;
-using Microsoft.Research.DynamicDataDisplay.DataSources;
-using Measurement = GSF.TimeSeries.UI.DataModels.Measurement;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Threading;
+using System.Xml;
+using System.Xml.Serialization;
 
 #pragma warning disable 612,618
 
@@ -72,17 +61,16 @@ namespace SAMIManager
         private DispatcherTimer m_refreshTimer;
 
         // Subscription fields
-        private DataSubscriber m_unsynchronizedSubscriber;
-        private bool m_subscribedUnsynchronized;
-        private string m_signalID;
-        private int m_processingUnsynchronizedMeasurements;
-        private int[] m_xAxisDataCollection;                                // Source data for the binding collection.
-        private EnumerableDataSource<int> m_xAxisBindingCollection;         // Values plotted on X-Axis.        
-        private ConcurrentQueue<double> m_yAxisDataCollection;              // Source data for the binding collection. Format is <signalID, collection of values from subscription API>.
-        private EnumerableDataSource<double> m_yAxisBindingCollection;      // Values plotted on Y-Axis.
-        private LineGraph m_lineGraph;
+        //private DataSubscriber m_unsynchronizedSubscriber;
+        //private bool m_subscribedUnsynchronized;
+        //private int m_processingUnsynchronizedMeasurements;
+        //private int[] m_xAxisDataCollection;                                // Source data for the binding collection.
+        //private EnumerableDataSource<int> m_xAxisBindingCollection;         // Values plotted on X-Axis.        
+        //private ConcurrentQueue<double> m_yAxisDataCollection;              // Source data for the binding collection. Format is <signalID, collection of values from subscription API>.
+        //private EnumerableDataSource<double> m_yAxisBindingCollection;      // Values plotted on Y-Axis.
+        //private LineGraph m_lineGraph;
         private bool m_eventHandlerRegistered;
-        private Measurement m_selectedMeasurement;
+        //private Measurement m_selectedMeasurement;
         #endregion
 
         #region [ Constructor ]
@@ -122,25 +110,26 @@ namespace SAMIManager
                 if (m_refreshTimer != null)
                     m_refreshTimer.Stop();
 
-                UnsubscribeUnsynchronizedData();
+                //UnsubscribeUnsynchronizedData();
             }
             finally
             {
                 m_refreshTimer = null;
-                m_unsynchronizedSubscriber = null;
+                //m_unsynchronizedSubscriber = null;
             }
         }
 
         private void HomeUserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!CommonFunctions.CurrentPrincipal.IsInRole("Administrator,Editor"))
-                ButtonInputWizard.IsEnabled = false;
+            //if (!CommonFunctions.CurrentPrincipal.IsInRole("Administrator,Editor"))
+            //    ButtonInputWizard.IsEnabled = false;
 
             m_windowsServiceClient = CommonFunctions.GetWindowsServiceClient();
 
             if (m_windowsServiceClient == null || m_windowsServiceClient.Helper.RemotingClient.CurrentState != ClientState.Connected)
             {
                 // TODO: Disable any buttons here that will not function without service connectivity
+                ButtonRestart.IsEnabled = false;
             }
             else
             {
@@ -150,6 +139,8 @@ namespace SAMIManager
                 CommonFunctions.SendCommandToService("Status -actionable");
                 CommonFunctions.SendCommandToService("Time -actionable");
                 m_eventHandlerRegistered = true;
+
+                ButtonRestart.IsEnabled = true;
             }
 
             m_refreshTimer = new DispatcherTimer();
@@ -217,68 +208,68 @@ namespace SAMIManager
                 TextBlockUser.Text = CommonFunctions.CurrentUser;
             }
 
-            ((HorizontalAxis)ChartPlotterDynamic.MainHorizontalAxis).LabelProvider.LabelStringFormat = "";
+            //((HorizontalAxis)ChartPlotterDynamic.MainHorizontalAxis).LabelProvider.LabelStringFormat = "";
 
-            //Remove legend on the right.
-            Panel legendParent = (Panel)ChartPlotterDynamic.Legend.ContentGrid.Parent;
-            if (legendParent != null)
-                legendParent.Children.Remove(ChartPlotterDynamic.Legend.ContentGrid);
+            ////Remove legend on the right.
+            //Panel legendParent = (Panel)ChartPlotterDynamic.Legend.ContentGrid.Parent;
+            //if (legendParent != null)
+            //    legendParent.Children.Remove(ChartPlotterDynamic.Legend.ContentGrid);
 
-            ChartPlotterDynamic.NewLegendVisible = false;
+            //ChartPlotterDynamic.NewLegendVisible = false;
 
-            m_xAxisDataCollection = new int[NumberOfPointsToPlot];
-            for (int i = 0; i < NumberOfPointsToPlot; i++)
-                m_xAxisDataCollection[i] = i;
-            m_xAxisBindingCollection = new EnumerableDataSource<int>(m_xAxisDataCollection);
-            m_xAxisBindingCollection.SetXMapping(x => x);
+            //m_xAxisDataCollection = new int[NumberOfPointsToPlot];
+            //for (int i = 0; i < NumberOfPointsToPlot; i++)
+            //    m_xAxisDataCollection[i] = i;
+            //m_xAxisBindingCollection = new EnumerableDataSource<int>(m_xAxisDataCollection);
+            //m_xAxisBindingCollection.SetXMapping(x => x);
 
-            LoadComboBoxDeviceAsync();
+            //LoadComboBoxDeviceAsync();
         }
 
-        private void LoadComboBoxDeviceAsync()
-        {
-            Thread t = new Thread(() =>
-            {
-                Dictionary<int, string> deviceLookupList = Device.GetLookupList(null);
+        //private void LoadComboBoxDeviceAsync()
+        //{
+        //    Thread t = new Thread(() =>
+        //    {
+        //        Dictionary<int, string> deviceLookupList = Device.GetLookupList(null);
 
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    ComboBoxDevice.ItemsSource = deviceLookupList;
+        //        Dispatcher.BeginInvoke(new Action(() =>
+        //        {
+        //            ComboBoxDevice.ItemsSource = deviceLookupList;
 
-                    if (Application.Current.Resources.Contains("SelectedDevice_Home"))
-                        ComboBoxDevice.SelectedIndex = (int)Application.Current.Resources["SelectedDevice_Home"];
-                    else
-                        ComboBoxDevice.SelectedIndex = 0;
-                }));
-            });
+        //            if (Application.Current.Resources.Contains("SelectedDevice_Home"))
+        //                ComboBoxDevice.SelectedIndex = (int)Application.Current.Resources["SelectedDevice_Home"];
+        //            else
+        //                ComboBoxDevice.SelectedIndex = 0;
+        //        }));
+        //    });
 
-            t.IsBackground = true;
-            t.Start();
-        }
+        //    t.IsBackground = true;
+        //    t.Start();
+        //}
 
-        private void LoadComboBoxMeasurementAsync()
-        {
-            int selectedDeviceID = ((KeyValuePair<int, string>)ComboBoxDevice.SelectedItem).Key;
+        //private void LoadComboBoxMeasurementAsync()
+        //{
+        //    int selectedDeviceID = ((KeyValuePair<int, string>)ComboBoxDevice.SelectedItem).Key;
 
-            Thread t = new Thread(() =>
-            {
-                ObservableCollection<Measurement> measurements = Measurement.Load(null, selectedDeviceID);
-                ObservableCollection<Measurement> itemsSource = new ObservableCollection<Measurement>(measurements.Where(m => m.SignalSuffix == "PA" || m.SignalSuffix == "FQ"));
+        //    Thread t = new Thread(() =>
+        //    {
+        //        ObservableCollection<Measurement> measurements = Measurement.Load(null, selectedDeviceID);
+        //        ObservableCollection<Measurement> itemsSource = new ObservableCollection<Measurement>(measurements.Where(m => m.SignalSuffix == "PA" || m.SignalSuffix == "FQ"));
 
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    ComboBoxMeasurement.ItemsSource = itemsSource;
+        //        Dispatcher.BeginInvoke(new Action(() =>
+        //        {
+        //            ComboBoxMeasurement.ItemsSource = itemsSource;
 
-                    if (Application.Current.Resources.Contains("SelectedMeasurement_Home") && (int)Application.Current.Resources["SelectedMeasurement_Home"] != -1)
-                        ComboBoxMeasurement.SelectedIndex = (int)Application.Current.Resources["SelectedMeasurement_Home"];
-                    else
-                        ComboBoxMeasurement.SelectedIndex = 0;
-                }));
-            });
+        //            if (Application.Current.Resources.Contains("SelectedMeasurement_Home") && (int)Application.Current.Resources["SelectedMeasurement_Home"] != -1)
+        //                ComboBoxMeasurement.SelectedIndex = (int)Application.Current.Resources["SelectedMeasurement_Home"];
+        //            else
+        //                ComboBoxMeasurement.SelectedIndex = 0;
+        //        }));
+        //    });
 
-            t.IsBackground = true;
-            t.Start();
-        }
+        //    t.IsBackground = true;
+        //    t.Start();
+        //}
 
         void RefreshTimer_Tick(object sender, EventArgs e)
         {
@@ -287,7 +278,7 @@ namespace SAMIManager
             {
                 try
                 {
-                    ButtonInputWizard.IsEnabled = CommonFunctions.CurrentPrincipal.IsInRole("Administrator,Editor");
+                    //ButtonInputWizard.IsEnabled = CommonFunctions.CurrentPrincipal.IsInRole("Administrator,Editor");
 
                     if (!m_eventHandlerRegistered)
                     {
@@ -438,206 +429,206 @@ namespace SAMIManager
             PopupStatus.IsOpen = false;
         }
 
-        private void ComboBoxMeasurement_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (ComboBoxMeasurement.Items.Count > 0)
-            {
-                m_selectedMeasurement = (Measurement)ComboBoxMeasurement.SelectedItem;
+        //private void ComboBoxMeasurement_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if (ComboBoxMeasurement.Items.Count > 0)
+        //    {
+        //        ////m_selectedMeasurement = (Measurement)ComboBoxMeasurement.SelectedItem;
 
-                // Capture's the Selected index of measurement Combo Box
-                if (Application.Current.Resources.Contains("SelectedMeasurement_Home"))
-                {
-                    Application.Current.Resources.Remove("SelectedMeasurement_Home");
-                    Application.Current.Resources.Add("SelectedMeasurement_Home", ComboBoxMeasurement.SelectedIndex);
-                }
-                else
-                    Application.Current.Resources.Add("SelectedMeasurement_Home", ComboBoxMeasurement.SelectedIndex);
+        //        ////// Capture's the Selected index of measurement Combo Box
+        //        ////if (Application.Current.Resources.Contains("SelectedMeasurement_Home"))
+        //        ////{
+        //        ////    Application.Current.Resources.Remove("SelectedMeasurement_Home");
+        //        ////    Application.Current.Resources.Add("SelectedMeasurement_Home", ComboBoxMeasurement.SelectedIndex);
+        //        ////}
+        //        ////else
+        //        ////    Application.Current.Resources.Add("SelectedMeasurement_Home", ComboBoxMeasurement.SelectedIndex);
 
-                if (m_selectedMeasurement != null)
-                {
-                    m_signalID = m_selectedMeasurement.SignalID.ToString();
+        //        ////if (m_selectedMeasurement != null)
+        //        ////{
+        //        ////    m_signalID = m_selectedMeasurement.SignalID.ToString();
 
-                    if (m_selectedMeasurement.SignalSuffix == "PA")
-                        ChartPlotterDynamic.Visible = DataRect.Create(0, -180, NumberOfPointsToPlot, 180);
-                    else if (m_selectedMeasurement.SignalSuffix == "FQ")
-                        ChartPlotterDynamic.Visible = DataRect.Create(0, Convert.ToDouble(IsolatedStorageManager.ReadFromIsolatedStorage("FrequencyRangeMin")), NumberOfPointsToPlot, Convert.ToDouble(IsolatedStorageManager.ReadFromIsolatedStorage("FrequencyRangeMax")));
-                }
-            }
-            else
-                m_signalID = string.Empty;
+        //        ////    if (m_selectedMeasurement.SignalSuffix == "PA")
+        //        ////        ChartPlotterDynamic.Visible = DataRect.Create(0, -180, NumberOfPointsToPlot, 180);
+        //        ////    else if (m_selectedMeasurement.SignalSuffix == "FQ")
+        //        ////        ChartPlotterDynamic.Visible = DataRect.Create(0, Convert.ToDouble(IsolatedStorageManager.ReadFromIsolatedStorage("FrequencyRangeMin")), NumberOfPointsToPlot, Convert.ToDouble(IsolatedStorageManager.ReadFromIsolatedStorage("FrequencyRangeMax")));
+        //        ////}
+        //    }
+        //    else
+        //        m_signalID = string.Empty;
 
-            SubscribeUnsynchronizedData();
-        }
+        //    SubscribeUnsynchronizedData();
+        //}
 
-        private void ComboBoxDevice_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // Capture's the Selected index of Device Combo Box
-            if (Application.Current.Resources.Contains("SelectedDevice_Home"))
-            {
-                Application.Current.Resources.Remove("SelectedDevice_Home");
-                Application.Current.Resources.Add("SelectedDevice_Home", ComboBoxDevice.SelectedIndex);
-            }
-            else
-            {
-                Application.Current.Resources.Add("SelectedDevice_Home", ComboBoxDevice.SelectedIndex);
-            }
+        //private void ComboBoxDevice_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    // Capture's the Selected index of Device Combo Box
+        //    if (Application.Current.Resources.Contains("SelectedDevice_Home"))
+        //    {
+        //        Application.Current.Resources.Remove("SelectedDevice_Home");
+        //        Application.Current.Resources.Add("SelectedDevice_Home", ComboBoxDevice.SelectedIndex);
+        //    }
+        //    else
+        //    {
+        //        Application.Current.Resources.Add("SelectedDevice_Home", ComboBoxDevice.SelectedIndex);
+        //    }
 
-            LoadComboBoxMeasurementAsync();
-        }
+        //    LoadComboBoxMeasurementAsync();
+        //}
 
         #region [ Unsynchronized Subscription ]
 
-        private void m_unsynchronizedSubscriber_ConnectionTerminated(object sender, EventArgs e)
-        {
-            m_subscribedUnsynchronized = false;
-            UnsubscribeUnsynchronizedData();
+        //private void m_unsynchronizedSubscriber_ConnectionTerminated(object sender, EventArgs e)
+        //{
+        //    m_subscribedUnsynchronized = false;
+        //    UnsubscribeUnsynchronizedData();
 
-            try
-            {
-                ChartPlotterDynamic.Dispatcher.BeginInvoke(new Action(() => ChartPlotterDynamic.Children.Remove(m_lineGraph)));
-            }
-            catch
-            {
-            }
+        //    try
+        //    {
+        //        ChartPlotterDynamic.Dispatcher.BeginInvoke(new Action(() => ChartPlotterDynamic.Children.Remove(m_lineGraph)));
+        //    }
+        //    catch
+        //    {
+        //    }
 
-            InitializeUnsynchronizedSubscription();
-        }
+        //    InitializeUnsynchronizedSubscription();
+        //}
 
-        private void m_unsynchronizedSubscriber_NewMeasurements(object sender, EventArgs<ICollection<IMeasurement>> e)
-        {
-            if (0 == Interlocked.Exchange(ref m_processingUnsynchronizedMeasurements, 1))
-            {
-                try
-                {
-                    foreach (IMeasurement measurement in e.Argument)
-                    {
-                        double tempValue = measurement.AdjustedValue;
+        //private void m_unsynchronizedSubscriber_NewMeasurements(object sender, EventArgs<ICollection<IMeasurement>> e)
+        //{
+        //    if (0 == Interlocked.Exchange(ref m_processingUnsynchronizedMeasurements, 1))
+        //    {
+        //        try
+        //        {
+        //            foreach (IMeasurement measurement in e.Argument)
+        //            {
+        //                double tempValue = measurement.AdjustedValue;
 
-                        if (!double.IsNaN(tempValue) && !double.IsInfinity(tempValue)) // Process data only if it is not NaN or infinity.
-                        {
-                            ChartPlotterDynamic.Dispatcher.Invoke(DispatcherPriority.Normal, (Action)delegate
-                            {
-                                if (m_yAxisDataCollection.Count == 0)
-                                {
-                                    for (int i = 0; i < NumberOfPointsToPlot; i++)
-                                        m_yAxisDataCollection.Enqueue(tempValue);
+        //                if (!double.IsNaN(tempValue) && !double.IsInfinity(tempValue)) // Process data only if it is not NaN or infinity.
+        //                {
+        //                    ChartPlotterDynamic.Dispatcher.Invoke(DispatcherPriority.Normal, (Action)delegate
+        //                    {
+        //                        if (m_yAxisDataCollection.Count == 0)
+        //                        {
+        //                            for (int i = 0; i < NumberOfPointsToPlot; i++)
+        //                                m_yAxisDataCollection.Enqueue(tempValue);
 
-                                    m_yAxisBindingCollection = new EnumerableDataSource<double>(m_yAxisDataCollection);
-                                    m_yAxisBindingCollection.SetYMapping(y => y);
+        //                            m_yAxisBindingCollection = new EnumerableDataSource<double>(m_yAxisDataCollection);
+        //                            m_yAxisBindingCollection.SetYMapping(y => y);
 
-                                    m_lineGraph = ChartPlotterDynamic.AddLineGraph(new CompositeDataSource(m_xAxisBindingCollection, m_yAxisBindingCollection), Color.FromArgb(255, 25, 25, 200), 1, "");
+        //                            m_lineGraph = ChartPlotterDynamic.AddLineGraph(new CompositeDataSource(m_xAxisBindingCollection, m_yAxisBindingCollection), Color.FromArgb(255, 25, 25, 200), 1, "");
 
-                                }
-                                else
-                                {
-                                    double oldValue;
+        //                        }
+        //                        else
+        //                        {
+        //                            double oldValue;
 
-                                    if (m_yAxisDataCollection.TryDequeue(out oldValue))
-                                        m_yAxisDataCollection.Enqueue(tempValue);
-                                }
-                                m_yAxisBindingCollection.RaiseDataChanged();
-                            });
-                        }
-                    }
-                }
-                finally
-                {
-                    Interlocked.Exchange(ref m_processingUnsynchronizedMeasurements, 0);
-                }
-            }
-        }
+        //                            if (m_yAxisDataCollection.TryDequeue(out oldValue))
+        //                                m_yAxisDataCollection.Enqueue(tempValue);
+        //                        }
+        //                        m_yAxisBindingCollection.RaiseDataChanged();
+        //                    });
+        //                }
+        //            }
+        //        }
+        //        finally
+        //        {
+        //            Interlocked.Exchange(ref m_processingUnsynchronizedMeasurements, 0);
+        //        }
+        //    }
+        //}
 
-        private void m_unsynchronizedSubscriber_ConnectionEstablished(object sender, EventArgs e)
-        {
-            m_subscribedUnsynchronized = true;
-            SubscribeUnsynchronizedData();
-        }
+        //private void m_unsynchronizedSubscriber_ConnectionEstablished(object sender, EventArgs e)
+        //{
+        //    m_subscribedUnsynchronized = true;
+        //    SubscribeUnsynchronizedData();
+        //}
 
-        private void m_unsynchronizedSubscriber_ProcessException(object sender, EventArgs<Exception> e)
-        {
+        //private void m_unsynchronizedSubscriber_ProcessException(object sender, EventArgs<Exception> e)
+        //{
 
-        }
+        //}
 
-        private void m_unsynchronizedSubscriber_StatusMessage(object sender, EventArgs<string> e)
-        {
+        //private void m_unsynchronizedSubscriber_StatusMessage(object sender, EventArgs<string> e)
+        //{
 
-        }
+        //}
 
-        private void InitializeUnsynchronizedSubscription()
-        {
-            try
-            {
-                using (AdoDataConnection database = new AdoDataConnection(CommonFunctions.DefaultSettingsCategory))
-                {
-                    m_unsynchronizedSubscriber = new DataSubscriber();
-                    m_unsynchronizedSubscriber.StatusMessage += m_unsynchronizedSubscriber_StatusMessage;
-                    m_unsynchronizedSubscriber.ProcessException += m_unsynchronizedSubscriber_ProcessException;
-                    m_unsynchronizedSubscriber.ConnectionEstablished += m_unsynchronizedSubscriber_ConnectionEstablished;
-                    m_unsynchronizedSubscriber.NewMeasurements += m_unsynchronizedSubscriber_NewMeasurements;
-                    m_unsynchronizedSubscriber.ConnectionTerminated += m_unsynchronizedSubscriber_ConnectionTerminated;
-                    m_unsynchronizedSubscriber.ConnectionString = database.DataPublisherConnectionString();
-                    m_unsynchronizedSubscriber.Initialize();
-                    m_unsynchronizedSubscriber.Start();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Failed to initialize subscription." + Environment.NewLine + ex.Message, "Failed to Subscribe", MessageBoxButton.OK);
-            }
-        }
+        //private void InitializeUnsynchronizedSubscription()
+        //{
+        //    try
+        //    {
+        //        using (AdoDataConnection database = new AdoDataConnection(CommonFunctions.DefaultSettingsCategory))
+        //        {
+        //            m_unsynchronizedSubscriber = new DataSubscriber();
+        //            m_unsynchronizedSubscriber.StatusMessage += m_unsynchronizedSubscriber_StatusMessage;
+        //            m_unsynchronizedSubscriber.ProcessException += m_unsynchronizedSubscriber_ProcessException;
+        //            m_unsynchronizedSubscriber.ConnectionEstablished += m_unsynchronizedSubscriber_ConnectionEstablished;
+        //            m_unsynchronizedSubscriber.NewMeasurements += m_unsynchronizedSubscriber_NewMeasurements;
+        //            m_unsynchronizedSubscriber.ConnectionTerminated += m_unsynchronizedSubscriber_ConnectionTerminated;
+        //            m_unsynchronizedSubscriber.ConnectionString = database.DataPublisherConnectionString();
+        //            m_unsynchronizedSubscriber.Initialize();
+        //            m_unsynchronizedSubscriber.Start();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Failed to initialize subscription." + Environment.NewLine + ex.Message, "Failed to Subscribe", MessageBoxButton.OK);
+        //    }
+        //}
 
-        private void StopUnsynchronizedSubscription()
-        {
-            if (m_unsynchronizedSubscriber != null)
-            {
-                m_unsynchronizedSubscriber.StatusMessage -= m_unsynchronizedSubscriber_StatusMessage;
-                m_unsynchronizedSubscriber.ProcessException -= m_unsynchronizedSubscriber_ProcessException;
-                m_unsynchronizedSubscriber.ConnectionEstablished -= m_unsynchronizedSubscriber_ConnectionEstablished;
-                m_unsynchronizedSubscriber.NewMeasurements -= m_unsynchronizedSubscriber_NewMeasurements;
-                m_unsynchronizedSubscriber.ConnectionTerminated -= m_unsynchronizedSubscriber_ConnectionTerminated;
-                m_unsynchronizedSubscriber.Stop();
-                m_unsynchronizedSubscriber.Dispose();
-                m_unsynchronizedSubscriber = null;
-            }
-        }
+        //private void StopUnsynchronizedSubscription()
+        //{
+        //    if (m_unsynchronizedSubscriber != null)
+        //    {
+        //        m_unsynchronizedSubscriber.StatusMessage -= m_unsynchronizedSubscriber_StatusMessage;
+        //        m_unsynchronizedSubscriber.ProcessException -= m_unsynchronizedSubscriber_ProcessException;
+        //        m_unsynchronizedSubscriber.ConnectionEstablished -= m_unsynchronizedSubscriber_ConnectionEstablished;
+        //        m_unsynchronizedSubscriber.NewMeasurements -= m_unsynchronizedSubscriber_NewMeasurements;
+        //        m_unsynchronizedSubscriber.ConnectionTerminated -= m_unsynchronizedSubscriber_ConnectionTerminated;
+        //        m_unsynchronizedSubscriber.Stop();
+        //        m_unsynchronizedSubscriber.Dispose();
+        //        m_unsynchronizedSubscriber = null;
+        //    }
+        //}
 
-        private void SubscribeUnsynchronizedData()
-        {
-            if (m_unsynchronizedSubscriber == null)
-                InitializeUnsynchronizedSubscription();
+        //private void SubscribeUnsynchronizedData()
+        //{
+        //    if (m_unsynchronizedSubscriber == null)
+        //        InitializeUnsynchronizedSubscription();
 
-            try
-            {
-                ChartPlotterDynamic.Dispatcher.BeginInvoke(new Action(() => ChartPlotterDynamic.Children.Remove(m_lineGraph)));
-            }
-            catch
-            {
-            }
+        //    try
+        //    {
+        //        ChartPlotterDynamic.Dispatcher.BeginInvoke(new Action(() => ChartPlotterDynamic.Children.Remove(m_lineGraph)));
+        //    }
+        //    catch
+        //    {
+        //    }
 
-            m_yAxisDataCollection = new ConcurrentQueue<double>();
+        //    m_yAxisDataCollection = new ConcurrentQueue<double>();
 
-            if (m_subscribedUnsynchronized && (object)m_unsynchronizedSubscriber != null && !string.IsNullOrEmpty(m_signalID))
-                m_unsynchronizedSubscriber.UnsynchronizedSubscribe(true, true, m_signalID, null, true, RefreshInterval);
-        }
+        //    if (m_subscribedUnsynchronized && (object)m_unsynchronizedSubscriber != null && !string.IsNullOrEmpty(m_signalID))
+        //        m_unsynchronizedSubscriber.UnsynchronizedSubscribe(true, true, m_signalID, null, true, RefreshInterval);
+        //}
 
-        /// <summary>
-        /// Unsubscribes data from the service.
-        /// </summary>
-        public void UnsubscribeUnsynchronizedData()
-        {
-            try
-            {
-                if (m_unsynchronizedSubscriber != null)
-                {
-                    m_unsynchronizedSubscriber.Unsubscribe();
-                    StopUnsynchronizedSubscription();
-                }
-            }
-            catch
-            {
-                m_unsynchronizedSubscriber = null;
-            }
-        }
+        ///// <summary>
+        ///// Unsubscribes data from the service.
+        ///// </summary>
+        //public void UnsubscribeUnsynchronizedData()
+        //{
+        //    try
+        //    {
+        //        if (m_unsynchronizedSubscriber != null)
+        //        {
+        //            m_unsynchronizedSubscriber.Unsubscribe();
+        //            StopUnsynchronizedSubscription();
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        m_unsynchronizedSubscriber = null;
+        //    }
+        //}
 
         #endregion
 

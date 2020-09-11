@@ -23,6 +23,11 @@
 //
 //******************************************************************************************************
 
+using GSF;
+using GSF.Communication;
+using GSF.Configuration;
+using GSF.Data;
+using GSF.IO;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -33,11 +38,6 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using GSF;
-using GSF.Communication;
-using GSF.Configuration;
-using GSF.Data;
-using GSF.IO;
 
 namespace ConfigurationSetupUtility.Screens
 {
@@ -367,7 +367,7 @@ namespace ConfigurationSetupUtility.Screens
                 m_newUserNameTextBox.Visibility = newUserVisibility;
                 m_newUserPasswordTextBox.Visibility = newUserVisibility;
                 m_sqlServerDatabaseInstructionTextBlock.Text = (!existing || migrate) ? newDatabaseMessage : oldDatabaseMessage;
-                //m_checkBoxIntegratedSecurity.IsChecked = true;
+                m_checkBoxIntegratedSecurity.IsChecked = true;
 
                 // If connecting to existing database, user name and password need not be admin user:
                 if (existing && !migrate)
