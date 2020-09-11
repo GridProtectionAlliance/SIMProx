@@ -110,7 +110,7 @@ namespace SAMI
 
                     // Define default adapter connection string if none is defined
                     if (string.IsNullOrWhiteSpace(actionAdapter.ConnectionString))
-                        actionAdapter.ConnectionString = "ConfigFileName=sami.ini";
+                        actionAdapter.ConnectionString = "ConfigFileName=sami.xml";
 
                     // Save record updates
                     actionAdapterTable.AddNewOrUpdateRecord(actionAdapter);
