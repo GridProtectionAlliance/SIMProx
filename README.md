@@ -2,7 +2,7 @@
 
 # About
 
-SAMI is a Windows service that provides a junction between SNMP traps and SSAM events, triggered through database stored procedure.
+SAMI is a Windows service that provides a junction between SNMP traps and database operations. Database operations default to sending SSAM events triggered through database stored procedure, but database commands are fully customizable.
 
 ## Requirements
 * 64-bit Windows 10 / Windows 2016 Server or newer.
