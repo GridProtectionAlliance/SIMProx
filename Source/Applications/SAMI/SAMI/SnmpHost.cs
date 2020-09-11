@@ -331,8 +331,8 @@ namespace SAMI
             {
                 StringBuilder output = new StringBuilder();
 
-                output.AppendLine($"Trap received for {message}");
-                
+                output.AppendLine($"{message.Version} trap message from {message.Community()} [{message.Enterprise}] with {message.Variables().Count:N0} variables");
+
                 foreach (Variable variable in e.TrapV2Message.Variables())
                     output.AppendLine($"    {variable}");
 

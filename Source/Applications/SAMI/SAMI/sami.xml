@@ -24,7 +24,7 @@
     <!-- Info Mappings -->
     <mapping oid="1.3.6.1.4.1.56056.1.1.1.2.1" flow="FL_OPENMIC_CPU" description="openMIC using {Value}% CPU at {Timestamp}." state="Information" condition="true" />
     <mapping oid="1.3.6.1.4.1.56056.1.1.1.4.1" flow="FL_OPENMIC_MEMORY" description="openMIC using {Value}MB memory at {Timestamp}." state="Information" condition="true" />
-    <mapping oid="1.3.6.1.4.1.56056.1.1.1.15.1" flow="FL_OPENMIC_UPTIME" description="openMIC uptime: {Value}" state="Information" condition="true" />
+    <mapping oid="1.3.6.1.4.1.56056.1.1.1.15.1" flow="FL_OPENMIC_UPTIME" description="openMIC uptime: {Value} seconds" state="Information" condition="true" />
     <!-- Warning Mappings -->
     <mapping oid="1.3.6.1.4.1.56056.1.1.1.2.1" flow="FL_OPENMIC_CPU" description="openMIC CPU exceeds 80%: {Value}% at {Timestamp}." state="Warning" condition="value > 80" />
     <mapping oid="1.3.6.1.4.1.56056.1.1.1.4.1" flow="FL_OPENMIC_MEMORY" description="openMIC memory exceeds 64GB: {Value}MB at {Timestamp}." state="Warning" condition="value > 64000" />
@@ -35,7 +35,7 @@
     <!-- Info Mappings -->
     <mapping oid="1.3.6.1.4.1.56056.1.1.1.2.1" flow="FL_OPENMIC2_CPU" description="openMIC2 using {Value}% CPU at {Timestamp}." state="Information" condition="true" />
     <mapping oid="1.3.6.1.4.1.56056.1.1.1.4.1" flow="FL_OPENMIC2_MEMORY" description="openMIC2 using {Value}MB memory at {Timestamp}." state="Information" condition="true" />
-    <mapping oid="1.3.6.1.4.1.56056.1.1.1.15.1" flow="FL_OPENMIC2_UPTIME" description="openMIC2 uptime: {Value}" state="Information" condition="true" />
+    <mapping oid="1.3.6.1.4.1.56056.1.1.1.15.1" flow="FL_OPENMIC2_UPTIME" description="openMIC2 uptime: {Value} seconds" state="Information" condition="true" />
     <!-- Warning Mappings -->
     <mapping oid="1.3.6.1.4.1.56056.1.1.1.2.1" flow="FL_OPENMIC2_CPU" description="openMIC2 CPU exceeds 80%: {Value}% at {Timestamp}." state="Warning" condition="value > 80" />
     <mapping oid="1.3.6.1.4.1.56056.1.1.1.4.1" flow="FL_OPENMIC2_MEMORY" description="openMIC2 memory exceeds 64GB: {Value}MB at {Timestamp}." state="Warning" condition="value > 64000" />
