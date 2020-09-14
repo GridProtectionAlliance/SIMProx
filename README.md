@@ -115,7 +115,7 @@ _For the next configuration step, it is helpful if the console is still visible 
 
 #### Initializing SNMP Proxy Host
 
-Make sure the SIMProx Manager application is open With the `SNMPHOST!PROCESS` adapter selected in the adapter list at the bottom of the page. Click the `Initialize` button and confirm the initialize action by clicking `Yes`. This operation will restart the `SNMP Proxy Host` adapter applying any updated argument settings and reloading any changes from the primary XML configuration file.
+Make sure the SIMProx Manager application is open with the `SNMPHOST!PROCESS` adapter selected in the adapter list at the bottom of the page. Click the `Initialize` button and confirm the initialize action by clicking `Yes`. This operation will restart the `SNMP Proxy Host` adapter applying any updated argument settings and reloading any changes from the primary XML configuration file.
 
 > Always make sure any changes are saved before initializing as the initialization process reads from the database configuration. Note that the adapter can also be reinitialized from the SIMProx Console application using the `initialize SNMPHOST!PROCESS` command.
 
@@ -125,7 +125,9 @@ If there are no error messages (typically in red), the `SNMP Proxy Host` should 
 
 ### Example Config File
 
-SNMP sources and database operation mappings are managed through am XML file that maps SNMP OIDs to database operations based on a run-time evaluated conditions that use the received SNMP value, for example:
+SNMP sources and database operation mappings are managed through am XML file that maps SNMP OIDs to database operations based on a run-time evaluated conditions that use the received SNMP value, see example XML configuration file below.
+
+> After making any changes to XML configuration, you will need to [Reinitialize SNMP Proxy Host](#initializing-snmp-proxy-host) for changes to take effect.
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
@@ -142,7 +144,7 @@ SNMP sources and database operation mappings are managed through am XML file tha
           Publisher    .6
           Process      .7
           Downloader   .8
-            Signal Index .N
+            Signal Index .N (see common statistics below)
               Value .1
               Name  .2
 
@@ -179,7 +181,143 @@ SNMP sources and database operation mappings are managed through am XML file tha
 
 ```
 
-> After making any changes to XML configuration, you will need to [Reinitialize SNMP Proxy Host](#initializing-snmp-proxy-host) for changes to take effect.
+### Common Statistics
+
+For OID sources coming from applications based on the Grid Solutions Framework Time-Series Library, the following table defines common statistics that can be forwarded to SNMP traps when the `ForwardStatisticsToSnmp` following configuration setting is set to `true` in the host application `exe.config` file, for example:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <categorizedSettings>
+    <systemSettings>
+      <add name="ForwardStatisticsToSnmp" value="true" description="Defines flag that determines if statistics should be published as SNMP trap messages." encrypted="false" />
+    </systemSettings>
+  </categorizedSettings>
+</configuration>
+```
+
+> Any OID for a common statistic value can be determined by the following expression `1.3.6.1.4.1.56056.1.1.S.N.T` where `S` is the index from the "Source" column, `N` is the value from the "Signal Index" column and `T` is `1` for the statistic value (data type as defined in the table) or `2` for signal reference name (data type of string).
+
+|Source|Signal&nbsp;Index|Name|Description|Data&nbsp;Type|
+|------|:---------------:|----|-----------|:------------:|
+| 1&#8209;System |1|CPU Usage|Percentage of CPU currently used by this process.|Double|
+| 1&#8209;System |2|Average CPU Usage|Average percentage of CPU used by this process.|Double|
+| 1&#8209;System |3|Memory Usage|Amount of memory currently used by this process in megabytes.|Double|
+| 1&#8209;System |4|Average Memory Usage|Average amount of memory used by this process in megabytes.|Double|
+| 1&#8209;System |5|Thread Count|Number of threads currently used by this process.|Double|
+| 1&#8209;System |6|Average Thread Count|Average number of threads used by this process.|Double|
+| 1&#8209;System |7|Threading Contention Rate|Current thread lock contention rate in attempts per second.|Double|
+| 1&#8209;System |8|Average Threading Contention Rate|Average thread lock contention rate in attempts per second.|Double|
+| 1&#8209;System |9|IO Usage|Amount of IO currently used by this process in kilobytes per second.|Double|
+| 1&#8209;System |10|Average IO Usage|Average amount of IO used by this process in kilobytes per second.|Double|
+| 1&#8209;System |11|IP Data Send Rate|Number of IP datagrams (or bytes on Mono) currently sent by this process per second.|Double|
+| 1&#8209;System |12|Average IP Data Send Rate|Average number of IP datagrams (or bytes on Mono) sent by this process per second.|Double|
+| 1&#8209;System |13|IP Data Receive Rate|Number of IP datagrams (or bytes on Mono) currently received by this process per second.|Double|
+| 1&#8209;System |14|Average IP Data Receive Rate|Average number of IP datagrams (or bytes on Mono) received by this process per second.|Double|
+| 1&#8209;System |15|Up Time|Total number of seconds system has been running.|Double|
+| 2&#8209;Device |1|Data Quality Errors|Number of data quality errors reported by device during last reporting interval.|Int32|
+| 2&#8209;Device |2|Time Quality Errors|Number of time quality errors reported by device during last reporting interval.|Int32|
+| 2&#8209;Device |3|Device Errors|Number of device errors reported by device during last reporting interval.|Int32|
+| 2&#8209;Device |4|Measurements Received|Number of measurements received from device during last reporting interval.|Int32|
+| 2&#8209;Device |5|Measurements Expected|Expected number of measurements received from device during last reporting interval.|Int32|
+| 2&#8209;Device |6|Measurements With Error|Number of measurements received while device was reporting errors during last reporting interval.|Int32|
+| 2&#8209;Device |7|Measurements Defined|Number of defined measurements (per frame) from device during last reporting interval.|Int32|
+| 3&#8209;InputStream |1|Total Frames|Total number of frames received from input stream during last reporting interval.|Int32|
+| 3&#8209;InputStream |2|Last Report Time|Timestamp of last received data frame from input stream.|DateTime|
+| 3&#8209;InputStream |3|Missing Frames|Number of frames that were not received from input stream during last reporting interval.|Int32|
+| 3&#8209;InputStream |4|CRC Errors|Number of CRC errors reported from input stream during last reporting interval.|Int32|
+| 3&#8209;InputStream |5|Out of Order Frames|Number of out-of-order frames received from input stream during last reporting interval.|Int32|
+| 3&#8209;InputStream |6|Minimum Latency|Minimum latency from input stream, in milliseconds, during last reporting interval.|Double|
+| 3&#8209;InputStream |7|Maximum Latency|Maximum latency from input stream, in milliseconds, during last reporting interval.|Double|
+| 3&#8209;InputStream |8|Input Stream Connected|Boolean value representing if input stream was continually connected during last reporting interval.|Boolean|
+| 3&#8209;InputStream |9|Received Configuration|Boolean value representing if input stream has received (or has cached) a configuration frame during last reporting interval.|Boolean|
+| 3&#8209;InputStream |10|Configuration Changes|Number of configuration changes reported by input stream during last reporting interval.|Int32|
+| 3&#8209;InputStream |11|Total Data Frames|Number of data frames received from input stream during last reporting interval.|Int32|
+| 3&#8209;InputStream |12|Total Configuration Frames|Number of configuration frames received from input stream during last reporting interval.|Int32|
+| 3&#8209;InputStream |13|Total Header Frames|Number of header frames received from input stream during last reporting interval.|Int32|
+| 3&#8209;InputStream |14|Average Latency|Average latency, in milliseconds, for data received from input stream during last reporting interval.|Double|
+| 3&#8209;InputStream |15|Defined Frame Rate|Frame rate as defined by input stream during last reporting interval.|Int32|
+| 3&#8209;InputStream |16|Actual Frame Rate|Latest actual mean frame rate for data received from input stream during last reporting interval.|Double|
+| 3&#8209;InputStream |17|Actual Data Rate|Latest actual mean Mbps data rate for data received from input stream during last reporting interval.|Double|
+| 3&#8209;InputStream |18|Missing Data|Number of data units that were not received at least once from input stream during last reporting interval.|Int32|
+| 3&#8209;InputStream |19|Total Bytes Received|Number of bytes received from the input source during last reporting interval.|Int32|
+| 3&#8209;InputStream |20|Lifetime Measurements|Number of processed measurements reported by the input stream during the lifetime of the input stream.|Int64 (as String)|
+| 3&#8209;InputStream |21|Lifetime Bytes Received|Number of bytes received from the input source during the lifetime of the input stream.|Int64 (as String)|
+| 3&#8209;InputStream |22|Minimum Measurements Per Second|The minimum number of measurements received per second during the last reporting interval.|Int32|
+| 3&#8209;InputStream |23|Maximum Measurements Per Second|The maximum number of measurements received per second during the last reporting interval.|Int32|
+| 3&#8209;InputStream |24|Average Measurements Per Second|The average number of measurements received per second during the last reporting interval.|Int32|
+| 3&#8209;InputStream |25|Lifetime Minimum Latency|Minimum latency from input stream, in milliseconds, during the lifetime of the input stream.|Int32|
+| 3&#8209;InputStream |26|Lifetime Maximum Latency|Maximum latency from input stream, in milliseconds, during the lifetime of the input stream.|Int32|
+| 3&#8209;InputStream |27|Lifetime Average Latency|Average latency, in milliseconds, for data received from input stream during the lifetime of the input stream.|Int32|
+| 3&#8209;InputStream |28|Up Time|Total number of seconds input stream has been running.|Double|
+| 4&#8209;OutputStream |1|Discarded Measurements|Number of discarded measurements reported by output stream during last reporting interval.|Int32|
+| 4&#8209;OutputStream |2|Received Measurements|Number of received measurements reported by the output stream during last reporting interval.|Int32|
+| 4&#8209;OutputStream |3|Expected Measurements|Number of expected measurements reported by the output stream during last reporting interval.|Int32|
+| 4&#8209;OutputStream |4|Processed Measurements|Number of processed measurements reported by the output stream during last reporting interval.|Int32|
+| 4&#8209;OutputStream |5|Measurements Sorted by Arrival|Number of measurements sorted by arrival reported by the output stream during last reporting interval.|Int32|
+| 4&#8209;OutputStream |6|Published Measurements|Number of published measurements reported by output stream during last reporting interval.|Int32|
+| 4&#8209;OutputStream |7|Downsampled Measurements|Number of downsampled measurements reported by the output stream during last reporting interval.|Int32|
+| 4&#8209;OutputStream |8|Missed Sorts by Timeout|Number of missed sorts by timeout reported by the output stream during last reporting interval.|Int32|
+| 4&#8209;OutputStream |9|Frames Ahead of Schedule|Number of frames ahead of schedule reported by the output stream during last reporting interval.|Int32|
+| 4&#8209;OutputStream |10|Published Frames|Number of published frames reported by the output stream during last reporting interval.|Int32|
+| 4&#8209;OutputStream |11|Output Stream Connected|Boolean value representing if the output stream was continually connected during last reporting interval.|Boolean|
+| 4&#8209;OutputStream |12|Minimum Latency|Minimum latency from output stream, in milliseconds, during last reporting interval.|Double|
+| 4&#8209;OutputStream |13|Maximum Latency|Maximum latency from output stream, in milliseconds, during last reporting interval.|Double|
+| 4&#8209;OutputStream |14|Average Latency|Average latency, in milliseconds, for data published from output stream during last reporting interval.|Double|
+| 4&#8209;OutputStream |15|Connected Clients|Number of clients connected to the command channel of the output stream during last reporting interval.|Int32|
+| 4&#8209;OutputStream |16|Total Bytes Sent|Number of bytes sent from output stream during last reporting interval.|Int32|
+| 4&#8209;OutputStream |17|Lifetime Measurements|Number of processed measurements reported by the output stream during the lifetime of the output stream.|Int64 (as String)|
+| 4&#8209;OutputStream |18|Lifetime Bytes Sent|Number of bytes sent from the output source during the lifetime of the output stream.|Int64 (as String)|
+| 4&#8209;OutputStream |19|Minimum Measurements Per Second|The minimum number of measurements sent per second during the last reporting interval.|Int32|
+| 4&#8209;OutputStream |20|Maximum Measurements Per Second|The maximum number of measurements sent per second during the last reporting interval.|Int32|
+| 4&#8209;OutputStream |21|Average Measurements Per Second|The average number of measurements sent per second during the last reporting interval.|Int32|
+| 4&#8209;OutputStream |22|Lifetime Minimum Latency|Minimum latency from output stream, in milliseconds, during the lifetime of the output stream.|Int32|
+| 4&#8209;OutputStream |23|Lifetime Maximum Latency|Maximum latency from output stream, in milliseconds, during the lifetime of the output stream.|Int32|
+| 4&#8209;OutputStream |24|Lifetime Average Latency|Average latency from output stream, in milliseconds, during the lifetime of the output stream.|Int32|
+| 4&#8209;OutputStream |25|Lifetime Discarded Measurements|Number of discarded measurements reported by output stream during the lifetime of the output stream.|Int32|
+| 4&#8209;OutputStream |26|Lifetime Downsampled Measurements|Number of downsampled measurements reported by the output stream during the lifetime of the output stream.|Int32|
+| 4&#8209;OutputStream |27|Up Time|Total number of seconds output stream has been running.|Double|
+| 5&#8209;Subscriber |1|Subscriber Connected|Boolean value representing if the subscriber was continually connected during last reporting interval.|Boolean|
+| 5&#8209;Subscriber |2|Subscriber Authenticated|Boolean value representing if the subscriber was authenticated to the publisher during last reporting interval.|Boolean|
+| 5&#8209;Subscriber |3|Processed Measurements|Number of processed measurements reported by the subscriber during last reporting interval.|Int32|
+| 5&#8209;Subscriber |4|Total Bytes Received|Number of bytes received from subscriber during last reporting interval.|Int32|
+| 5&#8209;Subscriber |5|Authorized Signal Count|Number of signals authorized to the subscriber by the publisher.|Int32|
+| 5&#8209;Subscriber |6|Unauthorized Signal Count|Number of signals denied to the subscriber by the publisher.|Int32|
+| 5&#8209;Subscriber |7|Lifetime Measurements|Number of processed measurements reported by the subscriber during the lifetime of the subscriber.|Int64 (as String)|
+| 5&#8209;Subscriber |8|Lifetime Bytes Received|Number of bytes received from subscriber during the lifetime of the subscriber.|Int64 (as String)|
+| 5&#8209;Subscriber |9|Minimum Measurements Per Second|The minimum number of measurements received per second during the last reporting interval.|Int32|
+| 5&#8209;Subscriber |10|Maximum Measurements Per Second|The maximum number of measurements received per second during the last reporting interval.|Int32|
+| 5&#8209;Subscriber |11|Average Measurements Per Second|The average number of measurements received per second during the last reporting interval.|Int32|
+| 5&#8209;Subscriber |12|Lifetime Minimum Latency|Minimum latency from output stream, in milliseconds, during the lifetime of the subscriber.|Int32|
+| 5&#8209;Subscriber |13|Lifetime Maximum Latency|Maximum latency from output stream, in milliseconds, during the lifetime of the subscriber.|Int32|
+| 5&#8209;Subscriber |14|Lifetime Average Latency|Average latency from output stream, in milliseconds, during the lifetime of the subscriber.|Int32|
+| 5&#8209;Subscriber |15|Up Time|Total number of seconds subscriber has been running.|Double|
+| 6&#8209;Publisher |1|Publisher Connected|Boolean value representing if the publisher was continually connected during last reporting interval.|Boolean|
+| 6&#8209;Publisher |2|Connected Clients|Number of clients connected to the command channel of the publisher during last reporting interval.|Int32|
+| 6&#8209;Publisher |3|Processed Measurements|Number of processed measurements reported by the publisher during last reporting interval.|Int32|
+| 6&#8209;Publisher |4|Total Bytes Sent|Number of bytes sent by the publisher during the last reporting interval.|Int32|
+| 6&#8209;Publisher |5|Lifetime Measurements|Number of processed measurements reported by the publisher during the lifetime of the publisher.|Int64 (as String)|
+| 6&#8209;Publisher |6|Lifetime Bytes Sent|Number of bytes sent by the publisher during the lifetime of the publisher.|Int64 (as String)|
+| 6&#8209;Publisher |7|Minimum Measurements Per Second|The minimum number of measurements sent per second during the last reporting interval.|Int32|
+| 6&#8209;Publisher |8|Maximum Measurements Per Second|The maximum number of measurements sent per second during the last reporting interval.|Int32|
+| 6&#8209;Publisher |9|Average Measurements Per Second|The average number of measurements sent per second during the last reporting interval.|Int32|
+| 6&#8209;Publisher |10|Lifetime Minimum Latency|Minimum latency from output stream, in milliseconds, during the lifetime of the publisher.|Int64 (as String)|
+| 6&#8209;Publisher |11|Lifetime Maximum Latency|Maximum latency from output stream, in milliseconds, during the lifetime of the publisher.|Int64 (as String)|
+| 6&#8209;Publisher |12|Lifetime Average Latency|Average latency from output stream, in milliseconds, during the lifetime of the publisher.|Int64 (as String)|
+| 6&#8209;Publisher |13|Up Time|Total number of seconds publisher has been running.|Double|
+| 7&#8209;Process |1|CPU Usage|Percentage of CPU currently used by the launched process.|Double|
+| 7&#8209;Process |2|Memory Usage|Amount of memory currently used by the launched process in megabytes.|Double|
+| 7&#8209;Process |3|Up Time|Total number of seconds the launched process has been running.|Double|
+| 8&#8209;Downloader |1|Downloader Enabled|Boolean value representing if the downloader was continually enabled with access to local download path during last reporting interval.|Boolean|
+| 8&#8209;Downloader |2|Downloader Attempted Connections|Number of attempted FTP connections reported by the downloader during last reporting interval.|Int64 (as String)|
+| 8&#8209;Downloader |3|Downloader Successful Connections|Number of successful FTP connections reported by the downloader during last reporting interval.|Int64 (as String)|
+| 8&#8209;Downloader |4|Downloader Failed Connections|Number of failed FTP connections reported by the downloader during last reporting interval.|Int64 (as String)|
+| 8&#8209;Downloader |5|Downloader Attempted Dial-ups|Number of attempted dial-ups reported by the downloader during last reporting interval.|Int64 (as String)|
+| 8&#8209;Downloader |6|Downloader Successful Dial-ups|Number of successful dial-ups reported by the downloader during last reporting interval.|Int64 (as String)|
+| 8&#8209;Downloader |7|Downloader Failed Dial-ups|Number of failed dial-ups reported by the downloader during last reporting interval.|Int64 (as String)|
+| 8&#8209;Downloader |8|Downloader Files Downloaded|Number of downloaded files reported by the downloader during last reporting interval.|Int64 (as String)|
+| 8&#8209;Downloader |9|Downloader MegaBytes Downloaded|Number of downloaded megabytes reported by the downloader during last reporting interval.|Double|
+| 8&#8209;Downloader |10|Downloader Connected Time|Total FTP connection time reported by the downloader during last reporting interval.|Double|
+| 8&#8209;Downloader |11|Downloader Dial-up Time|Total dial-up time reported by the downloader during last reporting interval.|Double|
 
   ---
 
