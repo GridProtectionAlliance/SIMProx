@@ -67,7 +67,7 @@ namespace SAMI
         private const double DefaultLagTime = 5.0D;
         private const double DefaultLeadTime = 5.0D;
         private const bool DefaultForwardingEnabled = false;
-        private const string DefaultForwardCommunity = nameof(GSF);
+        private const string DefaultForwardCommunity = "";
         private const string DefaultForwardIPEndPoint = Snmp.DefaultIPEndPoint;
         private const string DefaultForwardAuthPhrase = "pqgBG80CwgSDMKza";
         private const string DefaultForwardEncryptKey = "EjdEtEhHJCdLM04K";
@@ -210,7 +210,7 @@ namespace SAMI
         /// Gets or sets configured SNMP forwarding agent community string to use when forwarding is enabled.
         /// </summary>
         [ConnectionStringParameter]
-        [Description("Defines configured SNMP forwarding agent community string to use when forwarding is enabled.")]
+        [Description("Defines configured SNMP forwarding agent community string to use when forwarding is enabled. Leave blank to forward original source community string.")]
         [DefaultValue(DefaultForwardCommunity)]
         public string ForwardCommunity { get; set; } = DefaultForwardCommunity;
 
@@ -266,7 +266,7 @@ namespace SAMI
 
                 if (ForwardingEnabled)
                 {
-                    status.AppendFormat(" Forwarded Agent Community: {0}", ForwardCommunity);
+                    status.AppendFormat(" Forwarded Agent Community: {0}", string.IsNullOrWhiteSpace(ForwardCommunity) ? "<set to forward original source value>" : ForwardCommunity);
                     status.AppendLine();
                     status.AppendFormat(" Forwarded Agent End Point: {0}", ForwardIPEndPoint);
                     status.AppendLine();
@@ -348,11 +348,8 @@ namespace SAMI
 
             if (ForwardingEnabled)
             {
-                if (string.IsNullOrWhiteSpace(ForwardCommunity))
-                    throw new InvalidOperationException($"Configured SNMP forwarding agent community string \"{nameof(ForwardCommunity)}\" must be defined when SNMP forwarding is enabled");
+                m_forwardCommunity = string.IsNullOrWhiteSpace(ForwardCommunity) ? null : new OctetString(ForwardCommunity);
 
-                m_forwardCommunity = new OctetString(ForwardCommunity);
-                
                 if (string.IsNullOrWhiteSpace(ForwardIPEndPoint))
                     throw new InvalidOperationException($"Configured SNMP forwarding agent IP end point \"{nameof(ForwardIPEndPoint)}\" must be defined when SNMP forwarding is enabled");
 
@@ -503,7 +500,7 @@ namespace SAMI
                             VersionCode.V3,
                             Messenger.NextMessageId,
                             Messenger.NextRequestId,
-                            m_forwardCommunity,
+                            m_forwardCommunity ?? new OctetString(source.Community),
                             Snmp.EnterpriseRoot,
                             (uint)Environment.TickCount / 10,
                             variables,
