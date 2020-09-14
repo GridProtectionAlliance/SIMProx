@@ -148,8 +148,7 @@ SNMP sources and database operation mappings are managed through am XML file tha
 
     Flow states: Success, Warning, Alarm, Error, Information, Failover, Synchronize, Reschedule
 
-    Note that mapped database operations use integer value from specified
-    flow state based on following enumeration:
+    Note that mapped database operations use integer value from specified flow state based on following enumeration:
     https://github.com/GridProtectionAlliance/SIMProx/blob/master/Source/Applications/SIMProx/SIMProx/Config.cs#L37
   -->
   <source community="openMIC" authPhrase="pqgBG80CwgSDMKza" encryptKey="EjdEtEhHJCdLM04K" forward="true">
