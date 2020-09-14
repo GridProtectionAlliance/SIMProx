@@ -301,7 +301,7 @@ namespace ConfigurationSetupUtility
                         string statement;
 
                         if (line.StartsWith("CREATE DATABASE") || line.StartsWith("USE"))
-                            line = line.Replace("SAMI", DatabaseName);
+                            line = line.Replace("SIMProx", DatabaseName);
 
                         if (line.StartsWith("DELIMITER "))
                         {

@@ -338,7 +338,7 @@ namespace ConfigurationSetupUtility.Screens
                 if (!m_state.ContainsKey("encryptMySqlConnectionStrings"))
                     m_state.Add("encryptMySqlConnectionStrings", false);
 
-                m_databaseNameTextBox.Text = migrate ? "SAMI" + App.DatabaseVersionSuffix : "SAMI";
+                m_databaseNameTextBox.Text = migrate ? "SIMProx" + App.DatabaseVersionSuffix : "SIMProx";
 
                 // When using an existing database as-is, read existing connection settings out of the configuration file
                 string configFile = FilePath.GetAbsolutePath(App.ApplicationConfig);

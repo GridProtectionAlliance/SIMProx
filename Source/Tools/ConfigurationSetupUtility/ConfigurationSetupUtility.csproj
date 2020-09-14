@@ -403,12 +403,12 @@
   <Target Name="SignBuild" Condition="'$(SIGNTOOL)' != ''">
     <Exec Command="$(SIGNTOOL) $(TargetPath)" />
   </Target>
-  <Target Name="CopyBuild" Condition="Exists('$(TargetDir)..\..\Applications\SAMI')">
+  <Target Name="CopyBuild" Condition="Exists('$(TargetDir)..\..\Applications\SIMProx')">
     <ItemGroup>
       <FilesToCopy Include="$(TargetPath)" />
       <FilesToCopy Include="$(TargetPath).config" />
     </ItemGroup>
-    <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(TargetDir)..\..\Applications\SAMI" />
+    <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(TargetDir)..\..\Applications\SIMProx" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

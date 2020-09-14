@@ -1,4 +1,4 @@
-USE SAMI
+USE SIMProx
 GO
 
 INSERT INTO Company(Acronym, MapAcronym, Name, LoadOrder) VALUES('AEP', 'AEP', 'American Electric Power', 1)
@@ -202,7 +202,7 @@ GO
 INSERT INTO ConfigurationEntity(SourceName, RuntimeName, Description, LoadOrder, Enabled) VALUES('NodeInfo', 'NodeInfo', 'Defines information about the nodes in the database', 19, 1)
 GO
 
-INSERT INTO DataOperation(Description, AssemblyName, TypeName, MethodName, Arguments, LoadOrder, Enabled) VALUES('SAMI Startup Operations', 'SAMI.exe', 'SAMI.ServiceHost', 'KeyStartupOperations', '', 0, 1)
+INSERT INTO DataOperation(Description, AssemblyName, TypeName, MethodName, Arguments, LoadOrder, Enabled) VALUES('SIMProx Startup Operations', 'SIMProx.exe', 'SIMProx.ServiceHost', 'KeyStartupOperations', '', 0, 1)
 GO
 
 INSERT INTO DataOperation(Description, AssemblyName, TypeName, MethodName, Arguments, LoadOrder, Enabled) VALUES('Time Series Startup Operations', 'GSF.TimeSeries.dll', 'GSF.TimeSeries.TimeSeriesStartupOperations', 'PerformTimeSeriesStartupOperations', '', 0, 0)

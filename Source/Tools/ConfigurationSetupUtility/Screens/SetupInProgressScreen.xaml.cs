@@ -22,7 +22,7 @@
 //       Added code to stop key processes prior to modification of configuration files.
 //       Fixed error with AdoMetadataProvider section updates.
 //  02/28/2011 - Mehulbhai P Thakkar
-//       Modified code to update ForceLoginDisplay settings for SAMIManager config file.
+//       Modified code to update ForceLoginDisplay settings for SIMProxManager config file.
 //  03/02/2011 - J. Ritchie Carroll
 //       Simplified code for XML update for ForceLoginDisplay.
 //
@@ -281,7 +281,7 @@ namespace ConfigurationSetupUtility.Screens
                         int progress = 0;
 
                         // Determine which scripts need to be run.
-                        scriptNames.Add("SAMI.sql");
+                        scriptNames.Add("SIMProx.sql");
                         if (initialDataScript)
                         {
                             scriptNames.Add("InitialDataSet.sql");
@@ -347,7 +347,7 @@ namespace ConfigurationSetupUtility.Screens
                     CreateNewNode(mySqlSetup.ConnectionString, dataProviderString);
                 }
 
-                // Modify the SAMI configuration file.
+                // Modify the SIMProx configuration file.
                 ModifyConfigFiles(mySqlSetup.ConnectionString, dataProviderString, Convert.ToBoolean(m_state["encryptMySqlConnectionStrings"]));
                 SaveOldConnectionString();
 
@@ -394,7 +394,7 @@ namespace ConfigurationSetupUtility.Screens
                         int progress = 0;
 
                         // Determine which scripts need to be run.
-                        scriptNames.Add("SAMI.sql");
+                        scriptNames.Add("SIMProx.sql");
 
                         if (initialDataScript)
                         {
@@ -447,7 +447,7 @@ namespace ConfigurationSetupUtility.Screens
                         }
                         else if ((object)sqlServerSetup.IntegratedSecurity != null)
                         {
-                            const string GroupName = "SAMI Admins";
+                            const string GroupName = "SIMProx Admins";
                             string host = sqlServerSetup.HostName.Split('\\')[0].Trim();
 
                             bool useGroupLogin = UserInfo.LocalGroupExists(GroupName) && (host == "." || Transport.IsLocalAddress(host));
@@ -510,7 +510,7 @@ namespace ConfigurationSetupUtility.Screens
                     CreateNewNode(sqlServerSetup.NonPooledConnectionString, sqlServerSetup.DataProviderString);
                 }
 
-                // Modify the SAMI configuration file.
+                // Modify the SIMProx configuration file.
                 ModifyConfigFiles(sqlServerSetup.ConnectionString, sqlServerSetup.DataProviderString, Convert.ToBoolean(m_state["encryptSqlServerConnectionStrings"]));
                 SaveOldConnectionString();
 
@@ -556,7 +556,7 @@ namespace ConfigurationSetupUtility.Screens
                                     string loginName = row.ConvertField<string>("LoginName");
                                     string roleName = row.ConvertField<string>("RoleName");
 
-                                    string[] roles = (roleName != "SAMIAdminRole")
+                                    string[] roles = (roleName != "SIMProxAdminRole")
                                         ? new[] { roleName }
                                         : adminRoles;
 
@@ -631,7 +631,7 @@ namespace ConfigurationSetupUtility.Screens
                         int progress = 0;
 
                         // Determine which scripts need to be run.
-                        scriptNames.Add("SAMI.sql");
+                        scriptNames.Add("SIMProx.sql");
                         if (initialDataScript)
                         {
                             scriptNames.Add("InitialDataSet.sql");
@@ -708,7 +708,7 @@ namespace ConfigurationSetupUtility.Screens
                     CreateNewNode(oracleSetup.ConnectionString, dataProviderString);
                 }
 
-                // Modify the SAMI configuration file.
+                // Modify the SIMProx configuration file.
                 string connectionString = oracleSetup.ConnectionString;
                 ModifyConfigFiles(connectionString, dataProviderString, oracleSetup.EncryptConnectionString);
                 SaveOldConnectionString();
@@ -732,7 +732,7 @@ namespace ConfigurationSetupUtility.Screens
         {
             try
             {
-                const string GroupName = "SAMI Admins";
+                const string GroupName = "SIMProx Admins";
                 DirectorySecurity destinationSecurity;
                 string loginName;
 
@@ -753,11 +753,11 @@ namespace ConfigurationSetupUtility.Screens
                     bool sampleDataScript = initialDataScript && Convert.ToBoolean(m_state["sampleDataScript"]);
 
                     if (!initialDataScript)
-                        filePath = Directory.GetCurrentDirectory() + "\\Database scripts\\SQLite\\SAMI.db";
+                        filePath = Directory.GetCurrentDirectory() + "\\Database scripts\\SQLite\\SIMProx.db";
                     else if (!sampleDataScript)
-                        filePath = Directory.GetCurrentDirectory() + "\\Database scripts\\SQLite\\SAMI-InitialDataSet.db";
+                        filePath = Directory.GetCurrentDirectory() + "\\Database scripts\\SQLite\\SIMProx-InitialDataSet.db";
                     else
-                        filePath = Directory.GetCurrentDirectory() + "\\Database scripts\\SQLite\\SAMI-SampleDataSet.db";
+                        filePath = Directory.GetCurrentDirectory() + "\\Database scripts\\SQLite\\SIMProx-SampleDataSet.db";
 
                     UpdateProgressBar(2);
                     AppendStatusMessage(string.Format("Attempting to copy file {0} to {1}...", filePath, destination));
@@ -805,7 +805,7 @@ namespace ConfigurationSetupUtility.Screens
                     CreateNewNode(connectionString, dataProviderString);
                 }
 
-                // Modify the SAMI configuration file.
+                // Modify the SIMProx configuration file.
                 ModifyConfigFiles(connectionString, dataProviderString, false);
                 SaveOldConnectionString();
 
@@ -865,7 +865,7 @@ namespace ConfigurationSetupUtility.Screens
                         int progress = 0;
 
                         // Determine which scripts need to be run.
-                        scriptNames.Add("SAMI.sql");
+                        scriptNames.Add("SIMProx.sql");
                         if (initialDataScript)
                         {
                             scriptNames.Add("InitialDataSet.sql");
@@ -962,7 +962,7 @@ namespace ConfigurationSetupUtility.Screens
                     CreateNewNode(postgresSetup.ConnectionString, PostgresSetup.DataProviderString);
                 }
 
-                // Modify the SAMI configuration file.
+                // Modify the SIMProx configuration file.
                 string connectionString = postgresSetup.ConnectionString;
                 ModifyConfigFiles(connectionString, PostgresSetup.DataProviderString, postgresSetup.EncryptConnectionString);
                 SaveOldConnectionString();
@@ -982,12 +982,12 @@ namespace ConfigurationSetupUtility.Screens
         }
 
         /// <summary>
-        /// Gets the account name that the SAMI service is running under.
+        /// Gets the account name that the SIMProx service is running under.
         /// </summary>
-        /// <returns>The account name that the SAMI service is running under.</returns>
+        /// <returns>The account name that the SIMProx service is running under.</returns>
         private string GetServiceAccountName()
         {
-            SelectQuery selectQuery = new SelectQuery(string.Format("select name, startname from Win32_Service where name = '{0}'", "SAMI"));
+            SelectQuery selectQuery = new SelectQuery(string.Format("select name, startname from Win32_Service where name = '{0}'", "SIMProx"));
 
             using (ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher(selectQuery))
             {
@@ -1204,7 +1204,7 @@ namespace ConfigurationSetupUtility.Screens
         {
             try
             {
-                // Modify the SAMI configuration file.
+                // Modify the SIMProx configuration file.
                 ModifyConfigFiles(m_state["xmlFilePath"].ToString(), string.Empty, false);
 
                 // Remove cached configuration since it will
@@ -1225,7 +1225,7 @@ namespace ConfigurationSetupUtility.Screens
         {
             try
             {
-                // Modify the SAMI configuration file.
+                // Modify the SIMProx configuration file.
                 ModifyConfigFiles(m_state["webServiceUrl"].ToString(), string.Empty, false);
 
                 // Remove cached configuration since it will
@@ -1662,14 +1662,14 @@ namespace ConfigurationSetupUtility.Screens
 
             try
             {
-                Process[] instances = Process.GetProcessesByName("SAMIManager");
+                Process[] instances = Process.GetProcessesByName("SIMProxManager");
 
                 if (instances.Length > 0)
                 {
                     int total = 0;
-                    AppendStatusMessage("Attempting to stop running instances of the SAMI Manager...");
+                    AppendStatusMessage("Attempting to stop running instances of the SIMProx Manager...");
 
-                    // Terminate all instances of SAMI Manager running on the local computer
+                    // Terminate all instances of SIMProx Manager running on the local computer
                     foreach (Process process in instances)
                     {
                         process.Kill();
@@ -1677,7 +1677,7 @@ namespace ConfigurationSetupUtility.Screens
                     }
 
                     if (total > 0)
-                        AppendStatusMessage(string.Format("Stopped {0} SAMI Manager instance{1}.", total, total > 1 ? "s" : ""));
+                        AppendStatusMessage(string.Format("Stopped {0} SIMProx Manager instance{1}.", total, total > 1 ? "s" : ""));
 
                     // Add an extra line for visual separation of process termination status
                     AppendStatusMessage("");
@@ -1685,32 +1685,32 @@ namespace ConfigurationSetupUtility.Screens
             }
             catch (Exception ex)
             {
-                AppendStatusMessage("Failed to terminate running instances of the SAMI Manager: " + ex.Message + "\r\nModifications continuing anyway...\r\n");
+                AppendStatusMessage("Failed to terminate running instances of the SIMProx Manager: " + ex.Message + "\r\nModifications continuing anyway...\r\n");
             }
 
-            // Attempt to access service controller for the SAMI
-            ServiceController SAMIServiceController = ServiceController.GetServices().SingleOrDefault(svc => string.Compare(svc.ServiceName, "SAMI", true) == 0);
+            // Attempt to access service controller for the SIMProx
+            ServiceController SIMProxServiceController = ServiceController.GetServices().SingleOrDefault(svc => string.Compare(svc.ServiceName, "SIMProx", true) == 0);
 
-            if (SAMIServiceController != null)
+            if (SIMProxServiceController != null)
             {
                 try
                 {
-                    if (SAMIServiceController.Status == ServiceControllerStatus.Running)
+                    if (SIMProxServiceController.Status == ServiceControllerStatus.Running)
                     {
-                        AppendStatusMessage("Attempting to stop the SAMI Windows service...");
+                        AppendStatusMessage("Attempting to stop the SIMProx Windows service...");
 
-                        SAMIServiceController.Stop();
+                        SIMProxServiceController.Stop();
 
                         // Can't wait forever for service to stop, so we time-out after 20 seconds
-                        SAMIServiceController.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(20.0D));
+                        SIMProxServiceController.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(20.0D));
 
-                        if (SAMIServiceController.Status == ServiceControllerStatus.Stopped)
+                        if (SIMProxServiceController.Status == ServiceControllerStatus.Stopped)
                         {
                             m_state["restarting"] = true;
-                            AppendStatusMessage("Successfully stopped the SAMI Windows service.");
+                            AppendStatusMessage("Successfully stopped the SIMProx Windows service.");
                         }
                         else
-                            AppendStatusMessage("Failed to stop the SAMI Windows service after trying for 20 seconds.\r\nModifications continuing anyway...");
+                            AppendStatusMessage("Failed to stop the SIMProx Windows service after trying for 20 seconds.\r\nModifications continuing anyway...");
 
                         // Add an extra line for visual separation of service termination status
                         AppendStatusMessage("");
@@ -1718,21 +1718,21 @@ namespace ConfigurationSetupUtility.Screens
                 }
                 catch (Exception ex)
                 {
-                    AppendStatusMessage("Failed to stop the SAMI Windows service: " + ex.Message + "\r\nModifications continuing anyway...\r\n");
+                    AppendStatusMessage("Failed to stop the SIMProx Windows service: " + ex.Message + "\r\nModifications continuing anyway...\r\n");
                 }
             }
 
-            // If the SAMI service failed to stop or it is installed as stand-alone debug application, we try to stop any remaining running instances
+            // If the SIMProx service failed to stop or it is installed as stand-alone debug application, we try to stop any remaining running instances
             try
             {
-                Process[] instances = Process.GetProcessesByName("SAMI");
+                Process[] instances = Process.GetProcessesByName("SIMProx");
 
                 if (instances.Length > 0)
                 {
                     int total = 0;
-                    AppendStatusMessage("Attempting to stop running instances of the SAMI...");
+                    AppendStatusMessage("Attempting to stop running instances of the SIMProx...");
 
-                    // Terminate all instances of SAMI running on the local computer
+                    // Terminate all instances of SIMProx running on the local computer
                     foreach (Process process in instances)
                     {
                         process.Kill();
@@ -1740,7 +1740,7 @@ namespace ConfigurationSetupUtility.Screens
                     }
 
                     if (total > 0)
-                        AppendStatusMessage(string.Format("Stopped {0} SAMI instance{1}.", total, total > 1 ? "s" : ""));
+                        AppendStatusMessage(string.Format("Stopped {0} SIMProx instance{1}.", total, total > 1 ? "s" : ""));
 
                     // Add an extra line for visual separation of process termination status
                     AppendStatusMessage("");
@@ -1748,7 +1748,7 @@ namespace ConfigurationSetupUtility.Screens
             }
             catch (Exception ex)
             {
-                AppendStatusMessage("Failed to terminate running instances of the SAMI: " + ex.Message + "\r\nModifications continuing anyway...\r\n");
+                AppendStatusMessage("Failed to terminate running instances of the SIMProx: " + ex.Message + "\r\nModifications continuing anyway...\r\n");
             }
         }
 
@@ -1758,7 +1758,7 @@ namespace ConfigurationSetupUtility.Screens
             // Before modification of configuration files we try to stop key process
             AttemptToStopKeyProcesses();
 
-            object webManagerDir = Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\SAMIManagerServices", "Installation Path", null) ?? Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\SAMIManagerServices", "Installation Path", null);
+            object webManagerDir = Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\SIMProxManagerServices", "Installation Path", null) ?? Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\SIMProxManagerServices", "Installation Path", null);
             bool applyChangesToService = Convert.ToBoolean(m_state["applyChangesToService"]);
             bool applyChangesToLocalManager = Convert.ToBoolean(m_state["applyChangesToLocalManager"]);
             bool applyChangesToWebManager = Convert.ToBoolean(m_state["applyChangesToWebManager"]);
@@ -1766,12 +1766,12 @@ namespace ConfigurationSetupUtility.Screens
 
             AppendStatusMessage("Attempting to modify configuration files...");
 
-            configFile = Directory.GetCurrentDirectory() + "\\SAMI.exe.config";
+            configFile = Directory.GetCurrentDirectory() + "\\SIMProx.exe.config";
 
             if (applyChangesToService && File.Exists(configFile))
                 ModifyConfigFile(configFile, connectionString, dataProviderString, encrypted, true);
 
-            configFile = Directory.GetCurrentDirectory() + "\\SAMIManager.exe.config";
+            configFile = Directory.GetCurrentDirectory() + "\\SIMProxManager.exe.config";
 
             if (applyChangesToLocalManager && File.Exists(configFile))
                 ModifyConfigFile(configFile, connectionString, dataProviderString, encrypted, false);
@@ -2014,7 +2014,7 @@ namespace ConfigurationSetupUtility.Screens
                 addElement.Attributes.Append(attribute);
 
                 attribute = configFile.CreateAttribute("value");
-                attribute.Value = "SAMI.cer";
+                attribute.Value = "SIMProx.cer";
                 addElement.Attributes.Append(attribute);
 
                 attribute = configFile.CreateAttribute("description");
@@ -2152,10 +2152,10 @@ namespace ConfigurationSetupUtility.Screens
                 }
             }
 
-            // The following change will be done only for SAMIManager configuration.
+            // The following change will be done only for SIMProxManager configuration.
             if (Convert.ToBoolean(m_state["applyChangesToLocalManager"]) && m_state.ContainsKey("allowPassThroughAuthentication"))
             {
-                XmlNode forceLoginDisplayValue = configFile.SelectSingleNode("configuration/userSettings/SAMIManager.Properties.Settings/setting[@name = 'ForceLoginDisplay']/value");
+                XmlNode forceLoginDisplayValue = configFile.SelectSingleNode("configuration/userSettings/SIMProxManager.Properties.Settings/setting[@name = 'ForceLoginDisplay']/value");
 
                 if (forceLoginDisplayValue != null)
                     forceLoginDisplayValue.InnerXml = Convert.ToBoolean(m_state["allowPassThroughAuthentication"]) ? "False" : "True";
@@ -2192,7 +2192,7 @@ namespace ConfigurationSetupUtility.Screens
                 {
                     remotingServer.Add(new XElement("add",
                         new XAttribute("name", "CertificateFile"),
-                        new XAttribute("value", "SAMI.cer"),
+                        new XAttribute("value", "SIMProx.cer"),
                         new XAttribute("description", "Path to the local certificate used by this server for authentication."),
                         new XAttribute("encrypted", "false")));
                 }

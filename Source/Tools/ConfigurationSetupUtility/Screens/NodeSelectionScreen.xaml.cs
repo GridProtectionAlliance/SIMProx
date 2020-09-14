@@ -217,7 +217,7 @@ namespace ConfigurationSetupUtility.Screens
 
             if (m_nodeList.Count > 0)
             {
-                m_infoTextBlock.Text = "Please select the node you would like the SAMI to use.";
+                m_infoTextBlock.Text = "Please select the node you would like the SIMProx to use.";
             }
             else
             {
@@ -228,9 +228,9 @@ namespace ConfigurationSetupUtility.Screens
             }
 
             if (applyChangesToService)
-                nodeId = GetNodeIdFromConfigFile("SAMI.exe.config");
+                nodeId = GetNodeIdFromConfigFile("SIMProx.exe.config");
             else if (applyChangesToLocalManager)
-                nodeId = GetNodeIdFromConfigFile("SAMIManager.exe.config");
+                nodeId = GetNodeIdFromConfigFile("SIMProxManager.exe.config");
             else
                 nodeId = Guid.Empty;
 
@@ -242,10 +242,10 @@ namespace ConfigurationSetupUtility.Screens
             // If the configuration file node is not already in the list,
             // add it as a possible selection in case the user does not wish to change it.
             if (applyChangesToService)
-                TryAddNodeInfo("SAMI.exe.config");
+                TryAddNodeInfo("SIMProx.exe.config");
 
             if (applyChangesToLocalManager)
-                TryAddNodeInfo("SAMIManager.exe.config");
+                TryAddNodeInfo("SIMProxManager.exe.config");
 
             if (m_nodeList.Count == 1)
             {
@@ -375,7 +375,7 @@ namespace ConfigurationSetupUtility.Screens
         private IDbConnection GetConnectionFromConfigFile()
         {
             IDbConnection connection = null;
-            string configFileName = Directory.GetCurrentDirectory() + "\\SAMI.exe.config";
+            string configFileName = Directory.GetCurrentDirectory() + "\\SIMProx.exe.config";
 
             ConfigurationFile configFile;
             string connectionString;
@@ -498,7 +498,7 @@ namespace ConfigurationSetupUtility.Screens
         // Gets the company acronym that is currently stored in the config file.
         private string GetCompanyNameFromConfigFile()
         {
-            return GetValueOfSystemSetting("SAMI.exe.config", "CompanyName");
+            return GetValueOfSystemSetting("SIMProx.exe.config", "CompanyName");
         }
 
         // Gets the value of the config file system setting with the given name.
@@ -540,7 +540,7 @@ namespace ConfigurationSetupUtility.Screens
                 UpdateDataGrid();
         }
 
-        // Occurs when the user selects a different node to be used by the SAMI.
+        // Occurs when the user selects a different node to be used by the SIMProx.
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             object selectedItem = m_dataGrid.SelectedItem;

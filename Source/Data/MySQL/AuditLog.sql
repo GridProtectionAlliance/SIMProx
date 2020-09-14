@@ -1,4 +1,4 @@
-USE SAMI;
+USE SIMProx;
 
 DELIMITER $$
 

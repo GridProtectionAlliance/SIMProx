@@ -31,8 +31,8 @@ SET pwd=%CD%
 IF "%git%" == "" SET git=%PROGRAMFILES(X86)%\Git\cmd\git.exe
 IF "%replace%" == "" SET replace=\\GPAWEB\NightlyBuilds\Tools\ReplaceInFiles\ReplaceInFiles.exe
 
-SET defaulttarget=%LOCALAPPDATA%\Temp\SAMI
-IF "%remote%" == "" SET remote=git@github.com:GridProtectionAlliance/sami.git
+SET defaulttarget=%LOCALAPPDATA%\Temp\SIMProx
+IF "%remote%" == "" SET remote=git@github.com:GridProtectionAlliance/simprox.git
 IF "%source%" == "" SET source=\\GPAWEB\NightlyBuilds\GridSolutionsFramework\Beta
 IF "%sttp%" == "" SET sttp=\\GPAWEB\NightlyBuilds\sttp-gsfapi\Beta
 IF "%target%" == "" SET target=%defaulttarget%
@@ -45,7 +45,7 @@ SET targetmasterbuild=%target%\Build\Scripts
 SET sourceschema=%target%\Source\Dependencies\GSF\Data
 SET targetschema=%target%\Source\Data
 SET sourcetools=%source%\Tools
-SET targettools=%target%\Source\Applications\SAMI\SAMISetup
+SET targettools=%target%\Source\Applications\SIMProx\SIMProxSetup
 
 ECHO.
 ECHO Entering working directory...
@@ -96,21 +96,21 @@ DEL /F /Q "%dependencies%\VC_redist.x64.exe"
 ECHO.
 ECHO Updating database schema defintions...
 FOR /R "%sourceschema%" %%x IN (*.db) DO DEL "%%x"
-FOR /R "%sourceschema%" %%x IN (GSFSchema.*) DO REN "%%x" "SAMI.*"
-FOR /R "%sourceschema%" %%x IN (GSFSchema-InitialDataSet.*) DO REN "%%x" "SAMI-InitialDataSet.*"
-FOR /R "%sourceschema%" %%x IN (GSFSchema-SampleDataSet.*) DO REN "%%x" "SAMI-SampleDataSet.*"
+FOR /R "%sourceschema%" %%x IN (GSFSchema.*) DO REN "%%x" "SIMProx.*"
+FOR /R "%sourceschema%" %%x IN (GSFSchema-InitialDataSet.*) DO REN "%%x" "SIMProx-InitialDataSet.*"
+FOR /R "%sourceschema%" %%x IN (GSFSchema-SampleDataSet.*) DO REN "%%x" "SIMProx-SampleDataSet.*"
 MOVE /Y "%sourceschema%\*.*" "%targetschema%\"
 MOVE /Y "%sourceschema%\MySQL\*.*" "%targetschema%\MySQL\"
 MOVE /Y "%sourceschema%\Oracle\*.*" "%targetschema%\Oracle\"
 MOVE /Y "%sourceschema%\PostgreSQL\*.*" "%targetschema%\PostgreSQL\"
 MOVE /Y "%sourceschema%\SQL Server\*.*" "%targetschema%\SQL Server\"
 MOVE /Y "%sourceschema%\SQLite\*.*" "%targetschema%\SQLite\"
-"%replace%" /r /v "%targetschema%\*.sql" GSFSchema SAMI
+"%replace%" /r /v "%targetschema%\*.sql" GSFSchema SIMProx
 "%replace%" /r /v "%targetschema%\*.sql" "--*" "-- "
 "%replace%" /r /v "%targetschema%\*SampleDataSet.sql" 8500 8515
 "%replace%" /r /v "%targetschema%\*SampleDataSet.sql" 6165 6180
 "%replace%" /r /v "%targetschema%\*SampleDataSet.sql" "e7a5235d-cb6f-4864-a96e-a8686f36e599" "facd14d5-56b5-4f63-a8d8-56e830bf6f7c"
-"%replace%" /r /v "%targetschema%\*db-update.bat" GSFSchema SAMI
+"%replace%" /r /v "%targetschema%\*db-update.bat" GSFSchema SIMProx
 CD %targetschema%\SQLite
 CALL db-update.bat
 CD %target%

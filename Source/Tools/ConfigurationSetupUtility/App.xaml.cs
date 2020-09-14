@@ -46,15 +46,15 @@ namespace ConfigurationSetupUtility
         public const CipherStrength CryptoStrength = CipherStrength.Aes256;
         public const string CipherLookupKey = "0679d9ae-aca5-4702-a3f5-604415096987";
 
-        public const string ApplicationExe = "SAMI.exe";
-        public const string ApplicationConfig = "SAMI.exe.config";
-        public const string Manager = "SAMIManager";
-        public const string ManagerExe = "SAMIManager.exe";
-        public const string ManagerConfig = "SAMIManager.exe.config";
-        public const string BaseSqliteConfig = "SAMI.db";
-        public readonly static string SqliteConfigv2 = "SAMI" + DatabaseVersionSuffix + ".db";
-        public const string SqliteSampleData = "SAMI-SampleDataSet.db";
-        public const string SqliteInitialData = "SAMI-InitialDataSet.db";
+        public const string ApplicationExe = "SIMProx.exe";
+        public const string ApplicationConfig = "SIMProx.exe.config";
+        public const string Manager = "SIMProxManager";
+        public const string ManagerExe = "SIMProxManager.exe";
+        public const string ManagerConfig = "SIMProxManager.exe.config";
+        public const string BaseSqliteConfig = "SIMProx.db";
+        public readonly static string SqliteConfigv2 = "SIMProx" + DatabaseVersionSuffix + ".db";
+        public const string SqliteSampleData = "SIMProx-SampleDataSet.db";
+        public const string SqliteInitialData = "SIMProx-InitialDataSet.db";
 
         private readonly ErrorLogger m_errorLogger;
         private readonly Func<string> m_defaultErrorText;
@@ -82,26 +82,26 @@ namespace ConfigurationSetupUtility
             // When run from the installer the current directory may not be the directory where this application is running
             Directory.SetCurrentDirectory(FilePath.GetAbsolutePath(""));
 
-            // Attempt to create an event log source for the SAMI Manager for authentication logging. This needs to be done
-            // here since the CSU runs with administrative privileges and the SAMI Manager normally does not; also there is
+            // Attempt to create an event log source for the SIMProx Manager for authentication logging. This needs to be done
+            // here since the CSU runs with administrative privileges and the SIMProx Manager normally does not; also there is
             // a short system delay that exists before you can write to a new event log source after it is first created.
             try
             {
-                string applicationName = "SAMI";
+                string applicationName = "SIMProx";
 
-                // Create the event log source based on defined application name for SAMI if it does not already exist
+                // Create the event log source based on defined application name for SIMProx if it does not already exist
                 if (!EventLog.SourceExists(applicationName))
                     EventLog.CreateEventSource(applicationName, "Application");
 
-                applicationName = "SAMI Manager";
+                applicationName = "SIMProx Manager";
 
-                // Create the event log source based on defined application name for SAMI Manager if it does not already exist
+                // Create the event log source based on defined application name for SIMProx Manager if it does not already exist
                 if (!EventLog.SourceExists(applicationName))
                     EventLog.CreateEventSource(applicationName, "Application");
             }
             catch (Exception ex)
             {
-                m_errorLogger.Log(new InvalidOperationException(string.Format("Warning: failed to create or validate the event log source for the SAMI Manager: {0}", ex.Message), ex), false);
+                m_errorLogger.Log(new InvalidOperationException(string.Format("Warning: failed to create or validate the event log source for the SIMProx Manager: {0}", ex.Message), ex), false);
             }
         }
 

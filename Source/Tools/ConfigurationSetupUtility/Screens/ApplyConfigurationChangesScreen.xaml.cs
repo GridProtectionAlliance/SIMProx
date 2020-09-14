@@ -156,7 +156,7 @@ namespace ConfigurationSetupUtility.Screens
         // Initializes the state keys to their default values.
         private void InitializeState()
         {
-            object webManagerDir = Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\SAMIManagerServices", "Installation Path", null) ?? Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\SAMIManagerServices", "Installation Path", null);
+            object webManagerDir = Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\SIMProxManagerServices", "Installation Path", null) ?? Registry.GetValue("HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\SIMProxManagerServices", "Installation Path", null);
             bool managerOptionsEnabled = m_state["configurationType"].ToString() == "database";
             bool webManagerOptionEnabled = managerOptionsEnabled && (webManagerDir != null);
             bool existing = Convert.ToBoolean(m_state["existing"]);
@@ -185,68 +185,68 @@ namespace ConfigurationSetupUtility.Screens
             }
 
             // Enable or disable the options based on whether those options are available for the current configuration.
-            m_SAMIManagerLocalCheckBox.IsEnabled = managerOptionsEnabled;
-            m_SAMIManagerWebCheckBox.IsEnabled = webManagerOptionEnabled;
+            m_SIMProxManagerLocalCheckBox.IsEnabled = managerOptionsEnabled;
+            m_SIMProxManagerWebCheckBox.IsEnabled = webManagerOptionEnabled;
 
             // If the options are disabled, they must also be unchecked.
             if (!managerOptionsEnabled)
-                m_SAMIManagerLocalCheckBox.IsChecked = false;
+                m_SIMProxManagerLocalCheckBox.IsChecked = false;
 
             if (!webManagerOptionEnabled)
-                m_SAMIManagerWebCheckBox.IsChecked = false;
+                m_SIMProxManagerWebCheckBox.IsChecked = false;
 
             m_setupHistorianCheckBox.IsChecked = false;
 
             // Set up the state object with the proper initial values.
-            m_state["applyChangesToService"] = m_SAMIServiceCheckBox.IsChecked.GetValueOrDefault();
-            m_state["applyChangesToLocalManager"] = m_SAMIManagerLocalCheckBox.IsChecked.GetValueOrDefault();
-            m_state["applyChangesToWebManager"] = m_SAMIManagerWebCheckBox.IsChecked.GetValueOrDefault();
+            m_state["applyChangesToService"] = m_SIMProxServiceCheckBox.IsChecked.GetValueOrDefault();
+            m_state["applyChangesToLocalManager"] = m_SIMProxManagerLocalCheckBox.IsChecked.GetValueOrDefault();
+            m_state["applyChangesToWebManager"] = m_SIMProxManagerWebCheckBox.IsChecked.GetValueOrDefault();
             //m_state["setupHistorian"] = initialDataScript;
 
             m_state["setupHistorian"] = (bool)m_setupHistorianCheckBox.IsChecked;
             m_setupHistorianCheckBox.Visibility = Visibility.Collapsed;
-            m_SAMIManagerWebCheckBox.Visibility = Visibility.Collapsed;
+            m_SIMProxManagerWebCheckBox.Visibility = Visibility.Collapsed;
 
             m_horizontalRule.Visibility = m_setupHistorianCheckBox.Visibility;
         }
 
-        // Occurs when the user chooses to apply changes to the SAMI service.
-        private void SAMIServiceCheckBox_Checked(object sender, RoutedEventArgs e)
+        // Occurs when the user chooses to apply changes to the SIMProx service.
+        private void SIMProxServiceCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             if (m_state != null)
                 m_state["applyChangesToService"] = true;
         }
 
-        // Occurs when the user chooses to not apply changes to the SAMI service.
-        private void SAMIServiceCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        // Occurs when the user chooses to not apply changes to the SIMProx service.
+        private void SIMProxServiceCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             if (m_state != null)
                 m_state["applyChangesToService"] = false;
         }
 
-        // Occurs when the user chooses to changes to the local SAMI Manager application.
-        private void SAMIManagerLocalCheckBox_Checked(object sender, RoutedEventArgs e)
+        // Occurs when the user chooses to changes to the local SIMProx Manager application.
+        private void SIMProxManagerLocalCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             if (m_state != null)
                 m_state["applyChangesToLocalManager"] = true;
         }
 
-        // Occurs when the user chooses to not apply changes to the local SAMI Manager application.
-        private void SAMIManagerLocalCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        // Occurs when the user chooses to not apply changes to the local SIMProx Manager application.
+        private void SIMProxManagerLocalCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             if (m_state != null)
                 m_state["applyChangesToLocalManager"] = false;
         }
 
-        // Occurs when the user chooses to apply changes to the SAMI Manager web application.
-        private void SAMIManagerWebCheckBox_Checked(object sender, RoutedEventArgs e)
+        // Occurs when the user chooses to apply changes to the SIMProx Manager web application.
+        private void SIMProxManagerWebCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             if (m_state != null)
                 m_state["applyChangesToWebManager"] = true;
         }
 
-        // Occurs when the user chooses to not apply changes to the SAMI Manager web application.
-        private void SAMIManagerWebCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        // Occurs when the user chooses to not apply changes to the SIMProx Manager web application.
+        private void SIMProxManagerWebCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             if (m_state != null)
                 m_state["applyChangesToWebManager"] = false;

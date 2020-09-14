@@ -56,7 +56,7 @@ namespace ConfigurationSetupUtility.Screens
         // Fields
 
         private Dictionary<string, object> m_state;
-        private ServiceController m_SAMIServiceController;
+        private ServiceController m_SIMProxServiceController;
 
         #endregion
 
@@ -68,7 +68,7 @@ namespace ConfigurationSetupUtility.Screens
         public SetupCompleteScreen()
         {
             InitializeComponent();
-            InitializeSAMIServiceController();
+            InitializeSIMProxServiceController();
             InitializeServiceCheckboxState();
             InitializeManagerCheckboxState();
         }
@@ -243,53 +243,53 @@ namespace ConfigurationSetupUtility.Screens
                         // Remove old configuration file settings
                         try
                         {
-                            ConfigurationFile SAMIConfig = ConfigurationFile.Open("SAMI.exe.config");
+                            ConfigurationFile SIMProxConfig = ConfigurationFile.Open("SIMProx.exe.config");
 
                             // Some of the crypto settings elements were renamed for consistency, remove the old ones
-                            CategorizedSettingsElementCollection cryptoSection = SAMIConfig.Settings["cryptographyServices"];
+                            CategorizedSettingsElementCollection cryptoSection = SIMProxConfig.Settings["cryptographyServices"];
                             cryptoSection.Remove("RetryDelayInterval");
                             cryptoSection.Remove("MaximumRetryAttempts");
 
-                            // Example connection settings are updated between builds - remove the section and SAMI will add back the latest
-                            SAMIConfig.Settings.Remove("exampleConnectionSettings");
+                            // Example connection settings are updated between builds - remove the section and SIMProx will add back the latest
+                            SIMProxConfig.Settings.Remove("exampleConnectionSettings");
 
                             // Data publisher categories are now always lower case (such that code references are case insensitive)
-                            SAMIConfig.Settings.Remove("dataPublisher");
+                            SIMProxConfig.Settings.Remove("dataPublisher");
 
-                            SAMIConfig.Save(ConfigurationSaveMode.Full);
+                            SIMProxConfig.Save(ConfigurationSaveMode.Full);
                         }
                         catch
                         {
                             // Just continue on errors with removal of old settings - this is not critical
                         }
 
-                        // If the user requested it, start or restart the SAMI service
+                        // If the user requested it, start or restart the SIMProx service
                         if (m_serviceStartCheckBox.IsChecked.Value)
                         {
                             try
                             {
 #if DEBUG
-                                Process.Start("SAMI.exe");
+                                Process.Start("SIMProx.exe");
 #else
-                                m_SAMIServiceController.Start();
+                                m_SIMProxServiceController.Start();
 #endif
                             }
                             catch
                             {
-                                MessageBox.Show("The configuration utility was unable to start SAMI service, you will need to manually start the service.", "Cannot Start Windows Service", MessageBoxButton.OK, MessageBoxImage.Information);
+                                MessageBox.Show("The configuration utility was unable to start SIMProx service, you will need to manually start the service.", "Cannot Start Windows Service", MessageBoxButton.OK, MessageBoxImage.Information);
                             }
                         }
 
-                        // If the user requested it, start the SAMI Manager.
+                        // If the user requested it, start the SIMProx Manager.
                         if (m_managerStartCheckBox.IsChecked.Value)
                         {
-                            Process.Start("SAMIManager.exe");
+                            Process.Start("SIMProxManager.exe");
                         }
                     }
                     finally
                     {
-                        if (m_SAMIServiceController != null)
-                            m_SAMIServiceController.Close();
+                        if (m_SIMProxServiceController != null)
+                            m_SIMProxServiceController.Close();
                     }
                 }
 
@@ -311,7 +311,7 @@ namespace ConfigurationSetupUtility.Screens
                 m_state = value;
 
                 if (Convert.ToBoolean(m_state["restarting"]))
-                    m_serviceStartCheckBox.Content = "Restart the SAMI";
+                    m_serviceStartCheckBox.Content = "Restart the SIMProx";
             }
         }
 
@@ -329,36 +329,36 @@ namespace ConfigurationSetupUtility.Screens
 
         #region [ Methods ]
 
-        // Initializes the SAMI service controller.
-        private void InitializeSAMIServiceController()
+        // Initializes the SIMProx service controller.
+        private void InitializeSIMProxServiceController()
         {
             ServiceController[] services = ServiceController.GetServices();
-            m_SAMIServiceController = services.SingleOrDefault(svc => string.Compare(svc.ServiceName, "SAMI", true) == 0);
+            m_SIMProxServiceController = services.SingleOrDefault(svc => string.Compare(svc.ServiceName, "SIMProx", true) == 0);
         }
 
-        // Initializes the state of the SAMI service checkbox.
+        // Initializes the state of the SIMProx service checkbox.
         private void InitializeServiceCheckboxState()
         {
 #if DEBUG
-            bool serviceInstalled = File.Exists("SAMI.exe");
+            bool serviceInstalled = File.Exists("SIMProx.exe");
 #else
-            bool serviceInstalled = m_SAMIServiceController != null;
+            bool serviceInstalled = m_SIMProxServiceController != null;
 #endif
             m_serviceStartCheckBox.IsChecked = serviceInstalled;
             m_serviceStartCheckBox.IsEnabled = serviceInstalled;
         }
 
-        // Initializes the state of the SAMI Manager checkbox.
+        // Initializes the state of the SIMProx Manager checkbox.
         private void InitializeManagerCheckboxState()
         {
-            bool managerInstalled = File.Exists("SAMIManager.exe");
+            bool managerInstalled = File.Exists("SIMProxManager.exe");
             m_managerStartCheckBox.IsChecked = managerInstalled;
             m_managerStartCheckBox.IsEnabled = managerInstalled;
         }
 
         private void ValidateGrafanaBindings()
         {
-            string configFileName = Path.Combine(Directory.GetCurrentDirectory(), "SAMI.exe.config");
+            string configFileName = Path.Combine(Directory.GetCurrentDirectory(), "SIMProx.exe.config");
 
             if (!File.Exists(configFileName))
                 return;
@@ -467,7 +467,7 @@ namespace ConfigurationSetupUtility.Screens
 
         private void ValidateInternalDataPublisher()
         {
-            string configFile = Directory.GetCurrentDirectory() + "\\SAMI.exe.config";
+            string configFile = Directory.GetCurrentDirectory() + "\\SIMProx.exe.config";
             string configText = File.ReadAllText(configFile);
             string replacedConfigText = configText.Replace("<datapublisher>", "<internaldatapublisher>").Replace("</datapublisher>", "</internaldatapublisher>");
             File.WriteAllText(configFile, replacedConfigText);

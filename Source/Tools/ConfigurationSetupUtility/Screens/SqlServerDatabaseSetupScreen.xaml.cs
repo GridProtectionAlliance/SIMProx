@@ -227,9 +227,9 @@ namespace ConfigurationSetupUtility.Screens
 
                         if (serviceAccountIsLocal)
                         {
-                            const string failMessage = "Configuration Setup Utility has detected that the SAMI service account ({0}) is a local user, " +
+                            const string failMessage = "Configuration Setup Utility has detected that the SIMProx service account ({0}) is a local user, " +
                                 "but the database server is not local. This user will not be able to log into the database using integrated security. " +
-                                "Please either change the account under which the SAMI service runs, or choose to create a new database user.";
+                                "Please either change the account under which the SIMProx service runs, or choose to create a new database user.";
 
                             MessageBox.Show(string.Format(failMessage, serviceAccountName));
                             m_adminUserNameTextBox.Focus();
@@ -396,7 +396,7 @@ namespace ConfigurationSetupUtility.Screens
                 if (!m_state.ContainsKey("useSqlServerIntegratedSecurity"))
                     m_state.Add("useSqlServerIntegratedSecurity", false);
 
-                m_databaseNameTextBox.Text = migrate ? "SAMI" + App.DatabaseVersionSuffix : "SAMI";
+                m_databaseNameTextBox.Text = migrate ? "SIMProx" + App.DatabaseVersionSuffix : "SIMProx";
 
                 // When using an existing database as-is, read existing connection settings out of the configuration file
                 string configFile = FilePath.GetAbsolutePath(App.ApplicationConfig);
@@ -612,7 +612,7 @@ namespace ConfigurationSetupUtility.Screens
 
         private string GetServiceAccountName()
         {
-            SelectQuery selectQuery = new SelectQuery(string.Format("select name, startname from Win32_Service where name = '{0}'", "SAMI"));
+            SelectQuery selectQuery = new SelectQuery(string.Format("select name, startname from Win32_Service where name = '{0}'", "SIMProx"));
 
             using (ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher(selectQuery))
             {

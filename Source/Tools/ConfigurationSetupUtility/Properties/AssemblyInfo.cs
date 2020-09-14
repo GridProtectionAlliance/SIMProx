@@ -11,7 +11,7 @@ using System.Windows;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Grid Protection Alliance")]
-[assembly: AssemblyProduct("SAMI")]
+[assembly: AssemblyProduct("SIMProx")]
 [assembly: AssemblyCopyright("Copyright © 2015, Grid Protection Alliance.  All Rights Reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

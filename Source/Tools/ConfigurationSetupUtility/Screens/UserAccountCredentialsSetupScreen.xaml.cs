@@ -164,18 +164,18 @@ namespace ConfigurationSetupUtility.Screens
                     }
                     else
                     {
-                        // Define default values for database passwords, but attempt to load custom settings from SAMI or manager config files
+                        // Define default values for database passwords, but attempt to load custom settings from SIMProx or manager config files
                         const string DefaultPasswordRequirementRegex = "^.*(?=.{8,})(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).*$";
                         const string DefaultPasswordRequirementError = "Invalid Password: Password must be at least 8 characters and must contain at least 1 number, 1 upper case letter and 1 lower case letter";
 
                         string configFile, passwordRequirementsRegex = null, passwordRequirementsError = null;
 
-                        // Attempt to use the SAMI config file first
+                        // Attempt to use the SIMProx config file first
                         configFile = Directory.GetCurrentDirectory() + "\\" + App.ApplicationConfig; //"openPDC.exe.config");
 
                         if (!File.Exists(configFile) || !TryLoadPasswordRequirements(configFile, out passwordRequirementsRegex, out passwordRequirementsError))
                         {
-                            // Attempt to use the SAMI Manager config file second
+                            // Attempt to use the SIMProx Manager config file second
                             configFile = Directory.GetCurrentDirectory() + "\\" + App.ManagerConfig; //openPDCManager.exe.config";
 
                             if (File.Exists(configFile))
@@ -291,7 +291,7 @@ namespace ConfigurationSetupUtility.Screens
         private void RadioButtonWindowsAuthentication_Checked(object sender, RoutedEventArgs e)
         {
             // Windows Authentication Selected.            
-            MessageTextBlock.Text = "Please enter current credentials for the Windows authenticated user setup to be the administrator for SAMI. Credentials validated by operating system.";
+            MessageTextBlock.Text = "Please enter current credentials for the Windows authenticated user setup to be the administrator for SIMProx. Credentials validated by operating system.";
             UserAccountHeaderTextBlock.Text = "Windows Authentication";
             WindowsUserPasswordTextBox.IsEnabled = !CheckCurrentUserAuthentication();
             WindowsInfoGrid.Visibility = Visibility.Visible;
@@ -303,7 +303,7 @@ namespace ConfigurationSetupUtility.Screens
         private void RadioButtonWindowsAuthentication_Unchecked(object sender, RoutedEventArgs e)
         {
             // Database Authentication Selected.
-            MessageTextBlock.Text = "Please provide the desired credentials for database user setup to be the administrator for SAMI. Password complexity rules apply.";
+            MessageTextBlock.Text = "Please provide the desired credentials for database user setup to be the administrator for SIMProx. Password complexity rules apply.";
             UserAccountHeaderTextBlock.Text = "Database Authentication";
             WindowsInfoGrid.Visibility = Visibility.Collapsed;
             DbInfoGrid.Visibility = Visibility.Visible;

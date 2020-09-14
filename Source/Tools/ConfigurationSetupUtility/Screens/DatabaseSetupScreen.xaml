@@ -38,7 +38,7 @@
                                     be required for production deployments with compliance implications.
                                     <LineBreak />
                                     <LineBreak />
-                                    However, this level of logging can degrade performance in the SAMI Manager, 
+                                    However, this level of logging can degrade performance in the SIMProx Manager, 
                                     <LineBreak />
                                     so this should only be enabled if needed.
                                 </TextBlock>
