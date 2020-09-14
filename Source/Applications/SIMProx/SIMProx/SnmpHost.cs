@@ -51,7 +51,7 @@ namespace SIMProx
     /// <summary>
     /// Represents an event triggering adapter.
     /// </summary>
-    [Description("SNMP Host: Triggers SSAM from SNMP Events.")]
+    [Description("SNMP Proxy Host: Triggers Agent Forwarding and Database Operations from V3 SNMP Traps.")]
     public class SnmpHost : FacileActionAdapterBase
     {
         #region [ Members ]
