@@ -30,6 +30,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using GSF;
 using GSF.Data;
 using GSF.Diagnostics;
@@ -65,11 +66,19 @@ namespace SAMI
         private const int DefaultFramesPerSecond = 30;
         private const double DefaultLagTime = 5.0D;
         private const double DefaultLeadTime = 5.0D;
+        private const bool DefaultForwardingEnabled = false;
+        private const string DefaultForwardCommunity = nameof(GSF);
+        private const string DefaultForwardIPEndPoint = Snmp.DefaultIPEndPoint;
+        private const string DefaultForwardAuthPhrase = "pqgBG80CwgSDMKza";
+        private const string DefaultForwardEncryptKey = "EjdEtEhHJCdLM04K";
 
         // Fields
         private Config m_config;
         private SnmpEngine m_snmpEngine;
         private long m_totalReceivedSnmpTraps;
+        private OctetString m_forwardCommunity;
+        private DESPrivacyProvider m_forwardPrivacyProvider;
+        private IPEndPoint m_forwardIPEndPoint;
         private ConcurrentQueue<string[]> m_commandParameters;
         private DelayedSynchronizedOperation m_databaseOperation;
         private long m_totalDatabaseOperations;
@@ -190,6 +199,46 @@ namespace SAMI
         }
 
         /// <summary>
+        /// Gets or sets flag that determines if SNMP forwarding agent is enabled.
+        /// </summary>
+        [ConnectionStringParameter]
+        [Description("Defines flag that determines if SNMP forwarding agent is enabled.")]
+        [DefaultValue(DefaultForwardingEnabled)]
+        public bool ForwardingEnabled { get; set; } = DefaultForwardingEnabled;
+
+        /// <summary>
+        /// Gets or sets configured SNMP forwarding agent community string to use when forwarding is enabled.
+        /// </summary>
+        [ConnectionStringParameter]
+        [Description("Defines configured SNMP forwarding agent community string to use when forwarding is enabled.")]
+        [DefaultValue(DefaultForwardCommunity)]
+        public string ForwardCommunity { get; set; } = DefaultForwardCommunity;
+
+        /// <summary>
+        /// Gets or sets configured SNMP forwarding agent IP end point to use when forwarding is enabled.
+        /// </summary>
+        [ConnectionStringParameter]
+        [Description("Defines configured SNMP forwarding agent IP end point to use when forwarding is enabled. Example format: " + DefaultForwardIPEndPoint)]
+        [DefaultValue(DefaultForwardIPEndPoint)]
+        public string ForwardIPEndPoint { get; set; } = DefaultForwardIPEndPoint;
+
+        /// <summary>
+        /// Gets or sets configured SNMP forwarding agent authorization phrase to use when forwarding is enabled. Must be at least 16 characters.
+        /// </summary>
+        [ConnectionStringParameter]
+        [Description("Defines configured SNMP forwarding agent authorization phrase to use when forwarding is enabled. Must be at least 16 characters.")]
+        [DefaultValue(DefaultForwardAuthPhrase)]
+        public string ForwardAuthPhrase { get; set; } = DefaultForwardAuthPhrase;
+
+        /// <summary>
+        /// Gets or sets configured SNMP forwarding agent encryption key to use when forwarding is enabled. Must be at least 16 characters.
+        /// </summary>
+        [ConnectionStringParameter]
+        [Description("Defines configured SNMP forwarding agent encryption key to use when forwarding is enabled. Must be at least 16 characters.")]
+        [DefaultValue(DefaultForwardEncryptKey)]
+        public string ForwardEncryptKey { get; set; } = DefaultForwardEncryptKey;
+
+        /// <summary>
         /// Gets the flag indicating if this adapter supports temporal processing.
         /// </summary>
         public override bool SupportsTemporalProcessing => false;
@@ -212,6 +261,16 @@ namespace SAMI
                 status.AppendLine();
                 status.AppendFormat("  Last DB Operation Result: {0}", m_lastDatabaseOperationResult?.ToString() ?? "null");
                 status.AppendLine();
+                status.AppendFormat("  Forwarding Agent Enabled: {0}", ForwardingEnabled);
+                status.AppendLine();
+
+                if (ForwardingEnabled)
+                {
+                    status.AppendFormat(" Forwarded Agent Community: {0}", ForwardCommunity);
+                    status.AppendLine();
+                    status.AppendFormat(" Forwarded Agent End Point: {0}", ForwardIPEndPoint);
+                    status.AppendLine();
+                }
 
                 return status.ToString();
             }
@@ -287,6 +346,53 @@ namespace SAMI
                 Delay = (int)(DatabaseMaximumWriteInterval * 1000.0D)
             };
 
+            if (ForwardingEnabled)
+            {
+                if (string.IsNullOrWhiteSpace(ForwardCommunity))
+                    throw new InvalidOperationException($"Configured SNMP forwarding agent community string \"{nameof(ForwardCommunity)}\" must be defined when SNMP forwarding is enabled");
+
+                m_forwardCommunity = new OctetString(ForwardCommunity);
+                
+                if (string.IsNullOrWhiteSpace(ForwardIPEndPoint))
+                    throw new InvalidOperationException($"Configured SNMP forwarding agent IP end point \"{nameof(ForwardIPEndPoint)}\" must be defined when SNMP forwarding is enabled");
+
+                string endPoint = ForwardIPEndPoint;
+                string[] parts = endPoint.Split(':');
+
+                if (parts.Length != 2)
+                    throw new InvalidOperationException($"Configured SNMP forwarding agent IP end point \"{endPoint}\" format is invalid.");
+
+                if (!IPAddress.TryParse(parts[0], out IPAddress address))
+                    throw new InvalidOperationException($"Configured SNMP forwarding agent IP end point \"{endPoint}\" address is invalid");
+
+                if (!ushort.TryParse(parts[1], out ushort port))
+                    throw new InvalidOperationException($"Configured SNMP forwarding agent IP end point \"{endPoint}\" port is invalid");
+
+                m_forwardIPEndPoint = new IPEndPoint(address, port);
+
+                if (string.IsNullOrWhiteSpace(ForwardAuthPhrase))
+                    throw new InvalidOperationException($"Configured SNMP forwarding agent authorization phrase \"{nameof(ForwardAuthPhrase)}\" must be defined when SNMP forwarding is enabled");
+
+                if (string.IsNullOrWhiteSpace(ForwardEncryptKey))
+                    throw new InvalidOperationException($"Configured SNMP forwarding agent encryption key \"{nameof(ForwardEncryptKey)}\" must be defined when SNMP forwarding is enabled");
+
+                if (ForwardAuthPhrase.Length < 16)
+                {
+                    ForwardAuthPhrase = ForwardAuthPhrase.PadRight(16, '#');
+                    OnStatusMessage(MessageLevel.Warning, $"Configured SNMP forwarding agent authorization phrase \"{nameof(ForwardAuthPhrase)}\" was too short - value right-padded with \"#\" characters. Destination SNMP target node authorization phrase will need to be adjusted accordingly.");
+                }
+
+                if (ForwardEncryptKey.Length < 16)
+                {
+                    ForwardEncryptKey = ForwardEncryptKey.PadRight(16, '#');
+                    OnStatusMessage(MessageLevel.Warning, $"Configured SNMP forwarding agent encryption key \"{nameof(ForwardEncryptKey)}\" was too short - value right-padded with \"#\" characters. Destination SNMP target node encryption key will need to be adjusted accordingly.");
+                }
+
+                m_forwardPrivacyProvider = new DESPrivacyProvider(
+                    new OctetString(ForwardEncryptKey),
+                    new MD5AuthenticationProvider(new OctetString(ForwardAuthPhrase)));
+            }
+
             // Setup SNMP host engine
             UserRegistry users = new UserRegistry();
 
@@ -330,57 +436,87 @@ namespace SAMI
             if (m_config.CommunityMap.TryGetValue(message.Parameters.UserName.ToString(), out Source source))
             {
                 StringBuilder output = new StringBuilder();
+                IList<Variable> variables = message.Variables();
 
-                output.AppendLine($"{message.Version} trap message from {message.Community()} [{message.Enterprise}] with {message.Variables().Count:N0} variables");
+                output.AppendLine($"{message.Version} trap message from {message.Community()} [{message.Enterprise}] with {variables.Count:N0} variables");
 
-                foreach (Variable variable in e.TrapV2Message.Variables())
+                foreach (Variable variable in variables)
                     output.AppendLine($"    {variable}");
 
                 OnStatusMessage(MessageLevel.Info, output.ToString());
 
                 // Lookup any mapped variables
-                foreach (Variable variable in message.Variables())
+                foreach (Variable variable in variables)
                 {
                     string value = variable.Data.ToString();
 
-                    if (source.OIDMap.TryGetValue(variable.Id, out Mapping mapping))
+                    if (source.OIDMap.TryGetValue(variable.Id, out List<Mapping> mappings))
                     {
-                        // Provide value to mapping for condition evaluation
-                        mapping.SetValue(ParseValue(value));
-
-                        // Continue mapping operations when condition evaluates to true
-                        if (!mapping.ConditionSuccessful)
-                            continue;
-
-                        TemplatedExpressionParser parameterTemplate = new TemplatedExpressionParser
+                        foreach (Mapping mapping in mappings)
                         {
-                            TemplatedExpression = mapping.Description
-                        };
+                            // Provide value to mapping for condition evaluation
+                            mapping.SetValue(ParseValue(value));
 
-                        Dictionary<string, string> substitutions = new Dictionary<string, string>
-                        {
-                            ["{Value}"] = value,
-                            ["{Timestamp}"] = RealTime.ToString(TimeTagBase.DefaultFormat)
-                        };
+                            // Continue mapping operations when condition evaluates to true
+                            if (!mapping.ConditionSuccessful)
+                                continue;
 
-                        string description = parameterTemplate.Execute(substitutions);
+                            TemplatedExpressionParser parameterTemplate = new TemplatedExpressionParser
+                            {
+                                TemplatedExpression = mapping.Description
+                            };
 
-                        parameterTemplate = new TemplatedExpressionParser
-                        {
-                            TemplatedExpression = DatabaseCommandTemplate
-                        };
+                            Dictionary<string, string> substitutions = new Dictionary<string, string>
+                            {
+                                ["{Value}"] = value,
+                                ["{Timestamp}"] = RealTime.ToString(TimeTagBase.DefaultFormat)
+                            };
 
-                        substitutions = new Dictionary<string, string>
-                        {
-                            ["{EventType}"] = ((int)mapping.EventType).ToString(),
-                            ["{Flow}"] = mapping.Flow,
-                            ["{Description}"] = description
-                        };
+                            string description = parameterTemplate.Execute(substitutions);
 
-                        string[] commandParameters = parameterTemplate.Execute(substitutions).Split(',');
-                        m_commandParameters.Enqueue(commandParameters);
-                        m_databaseOperation?.RunOnceAsync();
+                            parameterTemplate = new TemplatedExpressionParser
+                            {
+                                TemplatedExpression = DatabaseCommandTemplate
+                            };
+
+                            substitutions = new Dictionary<string, string>
+                            {
+                                ["{EventType}"] = ((int)mapping.EventType).ToString(),
+                                ["{Flow}"] = mapping.Flow,
+                                ["{Description}"] = description
+                            };
+
+                            string[] commandParameters = parameterTemplate.Execute(substitutions).Split(',');
+                            m_commandParameters.Enqueue(commandParameters);
+                            m_databaseOperation?.RunOnceAsync();
+                        }
                     }
+                }
+
+                // Forward SNMP messages if configured to do so
+                if (ForwardingEnabled && source.Forward)
+                {
+                    Task.Run(async () =>
+                    {
+                        await new TrapV2Message
+                        (
+                            VersionCode.V3,
+                            Messenger.NextMessageId,
+                            Messenger.NextRequestId,
+                            m_forwardCommunity,
+                            Snmp.EnterpriseRoot,
+                            (uint)Environment.TickCount / 10,
+                            variables,
+                            m_forwardPrivacyProvider,
+                            Messenger.MaxMessageSize,
+                            Snmp.EngineID, 0, 0
+                        )
+                        .SendAsync(m_forwardIPEndPoint);
+                    })
+                    .ContinueWith(task =>
+                    {
+                        OnProcessException(MessageLevel.Error, new InvalidOperationException($"Failed to forward SNMP V3 trap to {m_forwardIPEndPoint}: {task.Exception?.Message}", task.Exception));
+                    }, TaskContinuationOptions.OnlyOnFaulted);
                 }
             }
             else

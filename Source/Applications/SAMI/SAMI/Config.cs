@@ -30,6 +30,7 @@ using System.Xml.Serialization;
 using Ciloci.Flee;
 using GSF;
 using GSF.Diagnostics;
+using GSF.Collections;
 
 namespace SAMI
 {
@@ -117,22 +118,27 @@ namespace SAMI
         [XmlAttribute("encryptKey")]
         public string EncryptKey { get; set; }
 
+        [XmlAttribute("forward")]
+        public bool Forward { get; set; } = true;
+
         [XmlElement(ElementName = "mapping")]
         public List<Mapping> Mappings { get; set; } = new List<Mapping>();
 
         [XmlIgnore]
-        public Dictionary<ObjectIdentifier, Mapping> OIDMap = new Dictionary<ObjectIdentifier, Mapping>();
+        public Dictionary<ObjectIdentifier, List<Mapping>> OIDMap = new Dictionary<ObjectIdentifier, List<Mapping>>();
 
         public void ParseMappings()
         {
             foreach (Mapping mapping in Mappings)
             {
-                if (!Enum.TryParse<EventType>(mapping.State, out EventType eventType))
+                if (!Enum.TryParse(mapping.State, out EventType eventType))
                     eventType = EventType.Success;
 
                 mapping.EventType = eventType;
 
-                OIDMap[new ObjectIdentifier(mapping.OID)] = mapping;
+                ObjectIdentifier oid = new ObjectIdentifier(mapping.OID);
+                List<Mapping> oidMappings = OIDMap.GetOrAdd(oid, _ => new List<Mapping>());
+                oidMappings.Add(mapping);
             }
         }
     }
@@ -146,16 +152,30 @@ namespace SAMI
         [XmlIgnore]
         public Dictionary<string, Source> CommunityMap = new Dictionary<string, Source>(StringComparer.OrdinalIgnoreCase);
 
-        public static Config Load(string filepath)
+        public static Config Load(string filePath)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(Config));
 
-            using (StreamReader reader = new StreamReader(filepath))
+            using (StreamReader reader = new StreamReader(filePath))
             {
                 Config config = (Config)serializer.Deserialize(reader);
                 
                 foreach (Source source in config.Sources)
+                {
+                    if (string.IsNullOrWhiteSpace(source.Community))
+                        throw new InvalidOperationException($"Configured SNMP source community \"{source.Community}\" must be defined. Check config file \"{filePath}\".");
+
+                    if (string.IsNullOrWhiteSpace(source.AuthPhrase))
+                        throw new InvalidOperationException($"Configured SNMP source authorization phrase for community \"{source.Community}\" must be defined. Check config file \"{filePath}\".");
+
+                    if (string.IsNullOrWhiteSpace(source.EncryptKey))
+                        throw new InvalidOperationException($"Configured SNMP source encryption key for community \"{source.Community}\" must be defined. Check config file \"{filePath}\".");
+
+                    source.AuthPhrase = source.AuthPhrase.PadRight(16, '#');
+                    source.EncryptKey = source.EncryptKey.PadRight(16, '#');
+                    
                     config.CommunityMap[source.Community] = source;
+                }
 
                 return config;
             }
