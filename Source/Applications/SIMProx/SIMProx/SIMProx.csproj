@@ -166,6 +166,9 @@
     <Compile Include="SnmpHost.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DebugHost.resx">
+      <DependentUpon>DebugHost.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ServiceInstall.resx">
       <DependentUpon>ServiceInstall.cs</DependentUpon>
     </EmbeddedResource>
