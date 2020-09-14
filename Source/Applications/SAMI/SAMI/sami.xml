@@ -40,4 +40,6 @@
     <mapping oid="1.3.6.1.4.1.56056.1.1.1.2.1" flow="FL_OPENMIC2_CPU" description="openMIC2 CPU exceeds 80%: {Value}% at {Timestamp}." state="Warning" condition="value > 80" />
     <mapping oid="1.3.6.1.4.1.56056.1.1.1.4.1" flow="FL_OPENMIC2_MEMORY" description="openMIC2 memory exceeds 64GB: {Value}MB at {Timestamp}." state="Warning" condition="value > 64000" />
   </source>
+  <!-- Agent Forward Only Source Example - No Mappings -->
+  <source community="openXDA" authPhrase="zapqwgSDMKgBG80C" encryptKey="KEjdEJCdLM04tEhH" forward="true" />
 </config>
