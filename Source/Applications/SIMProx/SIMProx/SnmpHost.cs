@@ -66,6 +66,7 @@ namespace SIMProx
         private const int DefaultFramesPerSecond = 30;
         private const double DefaultLagTime = 5.0D;
         private const double DefaultLeadTime = 5.0D;
+        private const ushort DefaultSnmpPort = 162;
         private const bool DefaultForwardingEnabled = false;
         private const string DefaultForwardCommunity = "";
         private const string DefaultForwardIPEndPoint = Snmp.DefaultIPEndPoint;
@@ -199,6 +200,14 @@ namespace SIMProx
         }
 
         /// <summary>
+        /// Gets or sets the SNMP port the proxy host will listen on.
+        /// </summary>
+        [ConnectionStringParameter]
+        [Description("Defines the SNMP port the proxy host will listen on.")]
+        [DefaultValue(DefaultSnmpPort)]
+        public ushort SnmpPort { get; set; } = DefaultSnmpPort;
+
+        /// <summary>
         /// Gets or sets flag that determines if SNMP forwarding agent is enabled.
         /// </summary>
         [ConnectionStringParameter]
@@ -254,6 +263,8 @@ namespace SIMProx
 
                 status.Append(base.Status);
                 status.AppendFormat("   Configuration File Name: {0}", ConfigFileName);
+                status.AppendLine();
+                status.AppendFormat("      SNMP Proxy Host Port: {0:N0}", SnmpPort);
                 status.AppendLine();
                 status.AppendFormat(" Total SNMP Traps Received: {0:N0}", m_totalReceivedSnmpTraps);
                 status.AppendLine();
@@ -420,7 +431,7 @@ namespace SIMProx
             SnmpApplicationFactory pipelineFactory = new SnmpApplicationFactory(store, membership, handlerFactory);
 
             m_snmpEngine = new SnmpEngine(pipelineFactory, new Listener { Users = users }, new EngineGroup());
-            m_snmpEngine.Listener.AddBinding(new IPEndPoint(IPAddress.Any, 162));
+            m_snmpEngine.Listener.AddBinding(new IPEndPoint(IPAddress.Any, SnmpPort));
             m_snmpEngine.Start();
         }
 
