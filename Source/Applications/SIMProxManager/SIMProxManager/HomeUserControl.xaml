@@ -58,7 +58,7 @@
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"/>
-            <sdk:Image HorizontalAlignment="Center" Height="241" Margin="10,10,0,0" sdk:Grid.Row="1" VerticalAlignment="Top" Width="587" Source="SplashScreen.png"/>
+            <sdk:Image HorizontalAlignment="Center" Height="241" Margin="10,10,0,0" sdk:Grid.Row="1" VerticalAlignment="Center" Width="587" Source="ManagerLogo.png"/>
 
         </Grid>
 
