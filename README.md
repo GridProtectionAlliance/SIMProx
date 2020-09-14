@@ -69,17 +69,15 @@ When the application is running, click the `Configure SIMProx` button on the hom
 
 ![SIMProx Manager Home Screen](Source/Documentation/Images/SIMProxManager_Home.PNG)
 
-On the configuration screen, make sure `SNMPHOST!PROCESS` is selected in the adapter list at the bottom of the page, then click on the `ConfigFileName` parameter in the `Connection String` section:
+On the configuration screen, make sure `SNMPHOST!PROCESS` is selected in the adapter list at the bottom of the page. The the `Connection String` section arguments define the options to use for the `SNMP Proxy Host` adapter instance that actually performs the SNMP mapped database and agent forwarding operations.
 
 ![SIMProx Manager Config Screen](Source/Documentation/Images/SIMProxManager_Config.PNG)
 
-These arguments define the options to use for the `SNMP Proxy Host` adapter instance that actually performs the SNMP mapped database and agent forwarding operations.
+The most important parameter here is the `ConfigFileName` setting that defines the local XML configuration for all the incoming SNMP sources and maps SNMP OIDs to database operations, see the [Example Config File](#example-config-file) below.
 
-The most important parameter here is the `ConfigFileName` option that defines the local XML configuration that defines all incoming SNMP sources and maps SNMP OIDs to database operations, see the [Example Config File](#example-config-file) below.
+To enable _agent forwarding_ for all configured sources, find the `ForwardingEnabled` setting and set it to `true`. When this value is true, you should validate other forwarding settings as well -- these setting names will be prefixed with `Forward`.
 
-To enable agent forwarding for all configured sources, find the `ForwardingEnabled` setting and set it to `true`. When this value is true, you should validate other forwarding settings as well.
-
-Note that by default the target database for mapped database operations will be the locally configured database. To set the target database operations to another database, change the values in the `DatabaseConnectionString` and `DatabaseProviderString` settings. Here are a few examples:
+Note that by default the target database for mapped database operations will be the locally configured database used to hold service configuration and metadata. To set the mapped target database operations to another database, change the values in the `DatabaseConnectionString` and `DatabaseProviderString` settings. Here are a few examples:
 
 | Database&nbsp;Type | Example Database Connection String | Database Provider String |
 | ------------------ | ------------------------- | --------------- |
@@ -88,7 +86,8 @@ Note that by default the target database for mapped database operations will be 
 | Oracle |  Data Source=tnsName; User ID=schemaUserName; Password=schemaPassword | AssemblyName={Oracle.DataAccess, Version=2.112.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342}; ConnectionType=Oracle.DataAccess.Client.OracleConnection; AdapterType=Oracle.DataAccess.Client.OracleDataAdapter |
 | SQLite |  Data Source=databaseName.db; Version=3; Foreign Keys=True; FailIfMissing=True | AssemblyName={System.Data.SQLite, Version=1.0.109.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139}; ConnectionType=System.Data.SQLite.SQLiteConnection; AdapterType=System.Data.SQLite.SQLiteDataAdapter |
 
-Database operation expressions are configurable as SQL statements using the `DatabaseCommand` setting. You can set this value to something like `INSERT INTO StatusLog(Source,Type,Message) VALUES({0},{1},{2})` -- or -- for a database stored procedure, something like `sp_LogEvent`. You should also make sure the `DatabaseCommandTemplate` is defined properly for the parameters in the `DatabaseCommand` setting, e.g.: `{EventType},'{Flow}','{Description}'`. Note that template values for the `DatabaseCommandTemplate` come directly from mappings in the primary XML configuration file as defined in the `ConfigFileName` setting, see the [Example Config File](#example-config-file) below.
+
+Database operation expressions are configurable as SQL statements using the `DatabaseCommand` setting. You can set this value to something like `INSERT INTO StatusLog(Source,Type,Message) VALUES({0},{1},{2})` -- or -- for a database stored procedure, something like `sp_LogEvent`. You should also make sure the `DatabaseCommandTemplate` is defined properly for the parameters in the `DatabaseCommand` setting, e.g.: `'{EventType},{Flow},'{Description}'`. Note that template values for the `DatabaseCommandTemplate` come directly from mappings in the primary XML configuration file as defined in the `ConfigFileName` setting, see the [Example Config File](#example-config-file) below.
 
 > Always click the `Save` button after making any changes as this operation updates the record in the configuration database.
 
@@ -102,13 +101,13 @@ From the console application you can type `list /a` (or `ls /a`) to show the ava
 
 For example, if the `SNMPHOST!PROCESS` adapter has an ID of 2, you can then enter `ls 2` (or `ls SNMPHOST!PROCESS`) to get detailed adapter status.
 
-> If the console is noisy with status information you can enter the `quiet` command followed by enter to pause feedback, note that your keyboard input is being accepted even if it is interrupted by messages scrolling by, just keep typing. To restore normal status mode use the `resume` command. Type `help` for other available commands.
+> If the console is noisy with status information you can enter the `quiet` command (or `q` for short) followed by enter to pause feedback, note that your keyboard input is being accepted even if it is interrupted by messages scrolling by, just keep typing. To restore normal status mode use the `resume` command (or `r` for short). Type `help` to see other available commands.
 
-_For the next step, make sure that console is still visible off to the side and pull the SIMProx Manager application back up and into focus so that both tools are visible at the same time._
+_For the next configuration step, it is helpful if the console is still visible to the side the SIMProx Manager application so that both tools are visible at the same time._
 
 #### Initializing SNMP Proxy Host
 
- Make sure the SIMProx Manager application is open With the `SNMPHOST!PROCESS` adapter selected in the adapter list at the bottom of the page. Click the `Initialize` button and confirm the initialize action by clicking `Yes`. This operation will restart the `SNMP Proxy Host` adapter applying any updated arguments and reloading any changes in the primary XML configuration file, e.g., enabled forwarding.
+Make sure the SIMProx Manager application is open With the `SNMPHOST!PROCESS` adapter selected in the adapter list at the bottom of the page. Click the `Initialize` button and confirm the initialize action by clicking `Yes`. This operation will restart the `SNMP Proxy Host` adapter applying any updated argument settings and reloading any changes from the primary XML configuration file.
 
 > Always make sure any changes are saved before initializing as the initialization process reads from the database configuration. Note that the adapter can also be reinitialized from the SIMProx Console application using the `initialize SNMPHOST!PROCESS` command.
 
