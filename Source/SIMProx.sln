@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{BD933E0E-B3FD-470B-B53B-56DA8BC27467}"
 EndProject
@@ -28,16 +28,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL Server", "SQL Server", 
 	ProjectSection(SolutionItems) = preProject
 		Data\SQL Server\AuditLog.sql = Data\SQL Server\AuditLog.sql
 		Data\SQL Server\InitialDataSet.sql = Data\SQL Server\InitialDataSet.sql
-		Data\SQL Server\SIMProx.sql = Data\SQL Server\SIMProx.sql
 		Data\SQL Server\SampleDataSet.sql = Data\SQL Server\SampleDataSet.sql
+		Data\SQL Server\SIMProx.sql = Data\SQL Server\SIMProx.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MySql", "MySql", "{B1AC9848-2909-4A7B-9541-8EA4E89E72F1}"
 	ProjectSection(SolutionItems) = preProject
 		Data\MySQL\AuditLog.sql = Data\MySQL\AuditLog.sql
 		Data\MySQL\InitialDataSet.sql = Data\MySQL\InitialDataSet.sql
-		Data\MySQL\SIMProx.sql = Data\MySQL\SIMProx.sql
 		Data\MySQL\SampleDataSet.sql = Data\MySQL\SampleDataSet.sql
+		Data\MySQL\SIMProx.sql = Data\MySQL\SIMProx.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SIMProx", "SIMProx", "{CE260396-797B-45DF-AC53-E4FC553B57C0}"
@@ -47,7 +47,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE.txt = LICENSE.txt
 		NOTICE.txt = NOTICE.txt
 		SIMProx.snk = SIMProx.snk
-		..\Build\Scripts\SIMProx.version = ..\Build\Scripts\SIMProx.version
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConfigurationSetupUtility", "ConfigurationSetupUtility", "{F7821DF0-BD48-481E-9DF9-D64AEFD24F57}"
@@ -89,8 +88,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{B1E85C
 		Documentation\Images\HMC - Time Resolution.png = Documentation\Images\HMC - Time Resolution.png
 		Documentation\Images\HMC - Use Local Clock as RealTime.png = Documentation\Images\HMC - Use Local Clock as RealTime.png
 		Documentation\Images\IaonAdapters.png = Documentation\Images\IaonAdapters.png
+		Documentation\Images\Project-Alpha-Logo_70.png = Documentation\Images\Project-Alpha-Logo_70.png
+		Documentation\Images\SIM-PROX icon.png = Documentation\Images\SIM-PROX icon.png
+		Documentation\Images\SIM-Prox Service.png = Documentation\Images\SIM-Prox Service.png
+		Documentation\Images\SIM-Prox Simple Stacked.png = Documentation\Images\SIM-Prox Simple Stacked.png
+		Documentation\Images\SIM-Prox Simple.png = Documentation\Images\SIM-Prox Simple.png
+		Documentation\Images\SIM-Prox title.png = Documentation\Images\SIM-Prox title.png
 		Documentation\Images\SIMProx Icon Baseline.pdn = Documentation\Images\SIMProx Icon Baseline.pdn
+		Documentation\Images\SIMProx.ico = Documentation\Images\SIMProx.ico
+		Documentation\Images\SIMProx.png = Documentation\Images\SIMProx.png
+		Documentation\Images\SIMProxConsole.ico = Documentation\Images\SIMProxConsole.ico
+		Documentation\Images\SIMProxLogo.png = Documentation\Images\SIMProxLogo.png
 		Documentation\Images\SIMProxLogo_basefigure.png = Documentation\Images\SIMProxLogo_basefigure.png
+		Documentation\Images\SIMProxManager.ico = Documentation\Images\SIMProxManager.ico
+		Documentation\Images\SIMProxManager_Config.PNG = Documentation\Images\SIMProxManager_Config.PNG
+		Documentation\Images\SIMProxManager_Console.PNG = Documentation\Images\SIMProxManager_Console.PNG
+		Documentation\Images\SIMProxManager_Home.PNG = Documentation\Images\SIMProxManager_Home.PNG
 		Documentation\Images\TVA Phasor Data Concentrator.png = Documentation\Images\TVA Phasor Data Concentrator.png
 	EndProjectSection
 EndProject
@@ -111,11 +124,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQLite", "SQLite", "{53255BB7-2046-4606-BF76-7B5C13F49819}"
 	ProjectSection(SolutionItems) = preProject
 		Data\SQLite\InitialDataSet.sql = Data\SQLite\InitialDataSet.sql
+		Data\SQLite\SampleDataSet.sql = Data\SQLite\SampleDataSet.sql
 		Data\SQLite\SIMProx-InitialDataSet.db = Data\SQLite\SIMProx-InitialDataSet.db
 		Data\SQLite\SIMProx-SampleDataSet.db = Data\SQLite\SIMProx-SampleDataSet.db
 		Data\SQLite\SIMProx.db = Data\SQLite\SIMProx.db
 		Data\SQLite\SIMProx.sql = Data\SQLite\SIMProx.sql
-		Data\SQLite\SampleDataSet.sql = Data\SQLite\SampleDataSet.sql
 		Data\SQLite\sqlite3.exe = Data\SQLite\sqlite3.exe
 	EndProjectSection
 EndProject
@@ -133,8 +146,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Oracle", "Oracle", "{051BD0
 	ProjectSection(SolutionItems) = preProject
 		Data\Oracle\AuditLog.sql = Data\Oracle\AuditLog.sql
 		Data\Oracle\InitialDataSet.sql = Data\Oracle\InitialDataSet.sql
-		Data\Oracle\SIMProx.sql = Data\Oracle\SIMProx.sql
 		Data\Oracle\SampleDataSet.sql = Data\Oracle\SampleDataSet.sql
+		Data\Oracle\SIMProx.sql = Data\Oracle\SIMProx.sql
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIMProx", "Applications\SIMProx\SIMProx\SIMProx.csproj", "{0BF2447E-252D-4712-B154-E350AF463081}"
@@ -282,8 +295,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PostgreSQL", "PostgreSQL", "{7C16E51B-85BC-4092-AB04-91460D4895A1}"
 	ProjectSection(SolutionItems) = preProject
 		Data\PostgreSQL\InitialDataSet.sql = Data\PostgreSQL\InitialDataSet.sql
-		Data\PostgreSQL\SIMProx.sql = Data\PostgreSQL\SIMProx.sql
 		Data\PostgreSQL\SampleDataSet.sql = Data\PostgreSQL\SampleDataSet.sql
+		Data\PostgreSQL\SIMProx.sql = Data\PostgreSQL\SIMProx.sql
 	EndProjectSection
 EndProject
 Global
@@ -412,5 +425,8 @@ Global
 		{6858B393-77B4-4F28-A4B1-14B484C10FB2} = {CE260396-797B-45DF-AC53-E4FC553B57C0}
 		{6CFC0EB9-8610-4200-806B-E2B62B63F8B3} = {A19659A8-EA00-4D5E-90C5-E8ABE7F4FB1C}
 		{7C16E51B-85BC-4092-AB04-91460D4895A1} = {E7006E3E-A430-4AB2-A6CA-7653D7F62D4B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7B24029C-15D0-46C2-A702-FDA6C4E852EE}
 	EndGlobalSection
 EndGlobal
