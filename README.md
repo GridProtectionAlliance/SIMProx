@@ -87,7 +87,15 @@ Note that by default the target database for mapped database operations will be 
 | SQLite |  Data Source=databaseName.db; Version=3; Foreign Keys=True; FailIfMissing=True | AssemblyName={System.Data.SQLite, Version=1.0.109.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139}; ConnectionType=System.Data.SQLite.SQLiteConnection; AdapterType=System.Data.SQLite.SQLiteDataAdapter |
 
 
-Database operation expressions are configurable as SQL statements using the `DatabaseCommand` setting. You can set this value to something like `INSERT INTO StatusLog(Source,Type,Message) VALUES({0},{1},{2})` -- or -- for a database stored procedure, something like `sp_LogEvent`. You should also make sure the `DatabaseCommandTemplate` is defined properly for the parameters in the `DatabaseCommand` setting, e.g.: `'{EventType},{Flow},'{Description}'`. Note that template values for the `DatabaseCommandTemplate` come directly from mappings in the primary XML configuration file as defined in the `ConfigFileName` setting, see the [Example Config File](#example-config-file) below.
+Database operation expressions are configurable as SQL statements using the `DatabaseCommand` setting. You can set this value to something like `INSERT INTO StatusLog(Source,Type,Message) VALUES({0},{1},{2})` -- or -- for a database stored procedure, something like `sp_LogEvent`. You should also make sure the `DatabaseCommandTemplate` is defined properly for the parameters in the `DatabaseCommand` setting, e.g.: `'{Flow}',{EventType},'{Description}'`. Note that template values for the `DatabaseCommandTemplate` come directly from mappings in the primary XML configuration file as defined in the `ConfigFileName` setting, see the [Example Config File](#example-config-file) below.
+
+The available `DatabaseCommandTemplate` parameter values are as follows:
+
+| Template Parameter | Data Type | XML Mapping Attribute |
+| :---------------------: | :-------: | ------------------ |
+| `{EventType}` | Integer ([see values](https://github.com/GridProtectionAlliance/SIMProx/blob/master/Source/Applications/SIMProx/SIMProx/Config.cs#L37)) | state |
+| `{Flow}` | String | flow |
+| `{Description}` | String | description |
 
 > Always click the `Save` button after making any changes as this operation updates the record in the configuration database.
 
