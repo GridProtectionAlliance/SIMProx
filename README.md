@@ -67,11 +67,11 @@ To change the default configuration of the SIMProx service, run the SIMProx Mana
 
 When the application is running, click the `Configure SIMProx` button on the home page:
 
-![SIMProx Manager Home Screen](https://github.com/GridProtectionAlliance/SIMProx/raw/master/Source/Documentation/Images/SIMProxManager_Home.PNG)
+![SIMProx Manager Home Screen](Source/Documentation/Images/SIMProxManager_Home.PNG)
 
-On the configuration screen, make sure `SNMPHOST!PROCESS` is selected in the adapter list at the bottom of the page, then click on the `Arguments` parameter in the `Connection String` section:
+On the configuration screen, make sure `SNMPHOST!PROCESS` is selected in the adapter list at the bottom of the page, then click on the `ConfigFileName` parameter in the `Connection String` section:
 
-![SIMProx Manager Config Screen](https://github.com/GridProtectionAlliance/SIMProx/raw/master/Source/Documentation/Images/SIMProxManager_Config.PNG)
+![SIMProx Manager Config Screen](Source/Documentation/Images/SIMProxManager_Config.PNG)
 
 These arguments define the options to use for the `SNMP Proxy Host` adapter instance that actually performs the SNMP mapped database and agent forwarding operations.
 
@@ -96,7 +96,7 @@ Database operation expressions are configurable as SQL statements using the `Dat
 
 A helpful application to use while configuring the `SNMP Proxy Host` adapter engine is the SIMProx Console application. Like the manager, this application can be found in the Windows start menu. Run this program now to continue with configuration steps:
 
-![SIMProx Remote Console Screen](https://github.com/GridProtectionAlliance/SIMProx/raw/master/Source/Documentation/Images/SIMProxManager_Console.PNG)
+![SIMProx Remote Console Screen](Source/Documentation/Images/SIMProxManager_Console.PNG)
 
 From the console application you can type `list /a` (or `ls /a`) to show the available adapters.
 
@@ -104,14 +104,17 @@ For example, if the `SNMPHOST!PROCESS` adapter has an ID of 2, you can then ente
 
 > If the console is noisy with status information you can enter the `quiet` command followed by enter to pause feedback, note that your keyboard input is being accepted even if it is interrupted by messages scrolling by, just keep typing. To restore normal status mode use the `resume` command. Type `help` for other available commands.
 
-Making sure that console is still visible off to the side, pull the SIMProx Manager application back up and into focus. With the `SNMPHOST!PROCESS` adapter still selected in the adapter list at the bottom of the page, click the `Initialize` button and confirm the initialize action by clicking `Yes`. This operation will restart the `SNMP Proxy Host` adapter applying any updated arguments, e.g., enabled forwarding.
+_For the next step, make sure that console is still visible off to the side and pull the SIMProx Manager application back up and into focus so that both tools are visible at the same time._
 
-> Make sure any changes are saved before initializing, the initialization process reads from the database configuration. You can also reinitialize the adapter from the SIMProx Console application using the `initialize SNMPHOST!PROCESS` command.
+#### Initializing SNMP Proxy Host
 
-If there are no messages in <font style='color: red'>red font</font>, the `SNMP Proxy Host` should be operational.
+ Make sure the SIMProx Manager application is open With the `SNMPHOST!PROCESS` adapter selected in the adapter list at the bottom of the page. Click the `Initialize` button and confirm the initialize action by clicking `Yes`. This operation will restart the `SNMP Proxy Host` adapter applying any updated arguments and reloading any changes in the primary XML configuration file, e.g., enabled forwarding.
+
+> Always make sure any changes are saved before initializing as the initialization process reads from the database configuration. Note that the adapter can also be reinitialized from the SIMProx Console application using the `initialize SNMPHOST!PROCESS` command.
+
+If there are no error messages (typically in red), the `SNMP Proxy Host` should now be operational.
 
 > Note that all feedback is logged locally to the `StatusLog.txt` file which can be found in the installation folder. The log file size is automatically curtailed per settings defined in the `SIMProx.exe.config` file. You can use the XML Configuration Editor, found in the SIMProx folder in the Windows start menu, to adjust any needed rarely changed configuration settings.
-
 
 ### Example Config File
 
@@ -170,8 +173,10 @@ SNMP sources and database operation mappings are managed through am XML file tha
 
 ```
 
+> After making any changes to XML configuration, you will need to [Reinitialize SNMP Proxy Host](#initializing-snmp-proxy-host) for changes to take effect.
+
   ---
 
   This project was created with the Grid Solutions Framework Time-Series Library [Project Alpha](https://github.com/GridProtectionAlliance/projectalpha)
 
-  [![Project Alpha](https://github.com/GridProtectionAlliance/SIMProx/raw/master/Source/Documentation/Images/Project-Alpha-Logo_70.png)](https://github.com/GridProtectionAlliance/projectalpha)
+  [![Project Alpha](Source/Documentation/Images/Project-Alpha-Logo_70.png)](https://github.com/GridProtectionAlliance/projectalpha)
