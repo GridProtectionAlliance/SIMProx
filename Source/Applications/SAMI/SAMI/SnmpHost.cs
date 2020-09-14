@@ -451,8 +451,10 @@ namespace SAMI
                     {
                         foreach (Mapping mapping in mappings)
                         {
+                            object parsedValue = ParseValue(value);
+
                             // Provide value to mapping for condition evaluation
-                            mapping.SetValue(ParseValue(value));
+                            mapping.SetValue(parsedValue);
 
                             // Continue mapping operations when condition evaluates to true
                             if (!mapping.ConditionSuccessful)
@@ -463,9 +465,27 @@ namespace SAMI
                                 TemplatedExpression = mapping.Description
                             };
 
+                            string formattedValue;
+
+                            switch (parsedValue)
+                            {
+                                case double dVal:
+                                    formattedValue = $"{dVal:N3}";
+                                    break;
+                                case int iVal:
+                                    formattedValue = $"{iVal:N0}";
+                                    break;
+                                case DateTime dtVal:
+                                    formattedValue = dtVal.ToString(TimeTagBase.DefaultFormat);
+                                    break;
+                                default:
+                                    formattedValue = parsedValue.ToString();
+                                    break;
+                            }
+
                             Dictionary<string, string> substitutions = new Dictionary<string, string>
                             {
-                                ["{Value}"] = value,
+                                ["{Value}"] = formattedValue,
                                 ["{Timestamp}"] = RealTime.ToString(TimeTagBase.DefaultFormat)
                             };
 
