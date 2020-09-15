@@ -29,7 +29,7 @@ SIMProx is a Windows service that provides a junction between SNMP V3 traps and 
 
 2) Open zip file and double click on `SIMProxSetup.msi`.
 
-3) Next through first page, accept [MIT license](../LICENSE) on next page, and click next again.
+3) Next through first page, accept [MIT license](https://github.com/GridProtectionAlliance/SIMProx/blob/master/LICENSE) on next page, and click next again.
 
 4) On the `Custom Setup` page you can change the target install location if desired.
 
