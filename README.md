@@ -125,7 +125,7 @@ If there are no error messages (typically in red), the `SNMP Proxy Host` should 
 
 ### Example Config File
 
-SNMP sources and database operation mappings are managed through am XML file that maps SNMP OIDs to database operations based on a run-time evaluated conditions that use the received SNMP value, see example XML configuration file below.
+SNMP sources and database operation mappings are managed through an XML file that maps SNMP OIDs to database operations based on a run-time evaluated conditions that use the received SNMP value, see example XML configuration file below.
 
 > After making any changes to XML configuration, you will need to [Reinitialize SNMP Proxy Host](#initializing-snmp-proxy-host) for changes to take effect.
 
@@ -183,7 +183,7 @@ SNMP sources and database operation mappings are managed through am XML file tha
 
 ### Common Statistics
 
-For OID sources coming from applications based on the Grid Solutions Framework Time-Series Library, the following table defines common statistics that can be forwarded to SNMP traps when the `ForwardStatisticsToSnmp` following configuration setting is set to `true` in the host application `exe.config` file, for example:
+For OID sources coming from applications based on the Grid Solutions Framework Time-Series Library, the following table defines common statistics that can be forwarded to SNMP traps when the `ForwardStatisticsToSnmp` configuration setting is set to `true` in the host application `exe.config` file, for example:
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
