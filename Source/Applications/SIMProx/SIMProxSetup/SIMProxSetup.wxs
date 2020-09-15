@@ -242,7 +242,7 @@
     <ComponentGroup Id="SIMProxComponents" Directory="INSTALLFOLDER">
       <Component Id="SIMProx">
         <File Id="SIMProx.exe" Name="$(var.SIMProx.TargetFileName)" Source="$(var.SIMProx.TargetPath)" />
-        <ServiceInstall Id="SIMProxService" Name="SIMProx" Account="[SERVICEACCOUNT]" Password="[SERVICEPASSWORD]" Type="ownProcess" Start="auto" ErrorControl="normal" Description="Provides processing by SIMProx for streaming time-series data in real-time using the Grid Solutions Framework." />
+        <ServiceInstall Id="SIMProxService" Name="SIMProx" Account="[SERVICEACCOUNT]" Password="[SERVICEPASSWORD]" Type="ownProcess" Start="auto" ErrorControl="normal" Description="Provides SNMP proxy processing for agent forwarding and database operation targets." />
         <ServiceControl Id="SIMProxServiceControl" Name="SIMProx" Stop="both" Remove="uninstall" />
       </Component>
       <Component Id="SIMProxConfig" Permanent="yes">
