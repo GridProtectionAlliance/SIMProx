@@ -4,6 +4,8 @@
 
 SIMProx is a Windows service that provides a junction between SNMP V3 traps and database operations. The service can also act as a singleton forwarding proxy agent for SNMP messages from configured agent sources.
 
+![CodeQL](https://github.com/GridProtectionAlliance/SIMProx/workflows/CodeQL/badge.svg)
+
 * [Discussions Forum](https://discussions.gridprotectionalliance.org/c/gpa-products/SNMP-Proxy-Service)
 * [Requirements](#requirements)
 * [Installation](#installation)
