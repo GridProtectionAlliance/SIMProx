@@ -141,9 +141,6 @@ namespace SIMProx
         /// <summary>
         /// Gets or sets the number of frames per second.
         /// </summary>
-        [ConnectionStringParameter]
-        [Description("Defines the number of frames per second expected by the adapter.")]
-        [DefaultValue(DefaultFramesPerSecond)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new int FramesPerSecond // Redeclared to provide a default value since property is not commonly used
         {
@@ -154,15 +151,6 @@ namespace SIMProx
         /// <summary>
         /// Gets or sets the allowed past time deviation tolerance, in seconds (can be sub-second).
         /// </summary>
-        /// <remarks>
-        /// <para>Defines the time sensitivity to past measurement timestamps.</para>
-        /// <para>The number of seconds allowed before assuming a measurement timestamp is too old.</para>
-        /// <para>This becomes the amount of delay introduced by the concentrator to allow time for data to flow into the system.</para>
-        /// </remarks>
-        /// <exception cref="ArgumentOutOfRangeException">LagTime must be greater than zero, but it can be less than one.</exception>
-        [ConnectionStringParameter]
-        [Description("Defines the allowed past time deviation tolerance, in seconds (can be sub-second).")]
-        [DefaultValue(DefaultLagTime)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new double LagTime // Redeclared to provide a default value since property is not commonly used
         {
@@ -173,15 +161,6 @@ namespace SIMProx
         /// <summary>
         /// Gets or sets the allowed future time deviation tolerance, in seconds (can be sub-second).
         /// </summary>
-        /// <remarks>
-        /// <para>Defines the time sensitivity to future measurement timestamps.</para>
-        /// <para>The number of seconds allowed before assuming a measurement timestamp is too advanced.</para>
-        /// <para>This becomes the tolerated +/- accuracy of the local clock to real-time.</para>
-        /// </remarks>
-        /// <exception cref="ArgumentOutOfRangeException">LeadTime must be greater than zero, but it can be less than one.</exception>
-        [ConnectionStringParameter]
-        [Description("Defines the allowed future time deviation tolerance, in seconds (can be sub-second).")]
-        [DefaultValue(DefaultLeadTime)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new double LeadTime // Redeclared to provide a default value since property is not commonly used
         {
@@ -205,7 +184,7 @@ namespace SIMProx
         [ConnectionStringParameter]
         [Description("Defines the SNMP port the proxy host will listen on.")]
         [DefaultValue(DefaultSnmpPort)]
-        public ushort SnmpPort { get; set; } = DefaultSnmpPort;
+        public int SnmpPort { get; set; } = DefaultSnmpPort;
 
         /// <summary>
         /// Gets or sets flag that determines if SNMP forwarding agent is enabled.
@@ -400,6 +379,9 @@ namespace SIMProx
                     new OctetString(ForwardEncryptKey),
                     new MD5AuthenticationProvider(new OctetString(ForwardAuthPhrase)));
             }
+
+            if (SnmpPort < 1 || SnmpPort > ushort.MaxValue)
+                throw new InvalidOperationException($"Configured SNMP proxy host port \"{SnmpPort}\" port is invalid. Valid possible range is from 1 to {ushort.MaxValue}");
 
             // Setup SNMP host engine
             UserRegistry users = new UserRegistry();
