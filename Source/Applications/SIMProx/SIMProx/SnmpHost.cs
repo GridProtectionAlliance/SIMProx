@@ -577,8 +577,8 @@ namespace SIMProx
         /// <summary>
         /// Queues database operation for execution. Operation will execute immediately if not already running.
         /// </summary>
-        [AdapterCommand("Queues database operation for execution. Operation will execute immediately if not already running.", "Administrator", "Editor")]
-        public void QueueOperation() => m_databaseOperation?.RunOnce();
+        [AdapterCommand("Executes any queued database operations for execution. Operation will execute immediately if not already running.", "Administrator", "Editor")]
+        public void ExecuteOperation() => m_databaseOperation?.RunOnce();
 
         private void DatabaseOperation()
         {
