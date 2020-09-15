@@ -106,7 +106,7 @@ The available `DatabaseCommandTemplate` parameter values are as follows:
 
 > Always click the `Save` button after making any changes as this operation updates the record in the configuration database.
 
-### SIMProxy Remote Console
+### SIMProx Remote Console
 
 A helpful application to use while configuring the `SNMP Proxy Host` adapter engine is the SIMProx Console application. Like the manager, this application can be found in the Windows start menu. Run this program now to continue with configuration steps:
 
