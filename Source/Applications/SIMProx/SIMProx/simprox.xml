@@ -12,9 +12,11 @@
           Publisher    .6
           Process      .7
           Downloader   .8
-            Signal Index .N
+            Signal Index .N (see https://github.com/GridProtectionAlliance/SIMProx#common-statistics)
               Value .1
               Name  .2
+
+    Note that system is currently configured to only respond to V3 SNMP traps.
               
     Flow states: Success, Warning, Alarm, Error, Information, Failover, Synchronize, Reschedule
 

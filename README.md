@@ -2,7 +2,7 @@
 
 # About
 
-SIMProx is a Windows service that provides a junction between SNMP traps and database operations. The service can also act as a singleton forwarding proxy agent for SNMP messages from configured agent sources.
+SIMProx is a Windows service that provides a junction between SNMP V3 traps and database operations. The service can also act as a singleton forwarding proxy agent for SNMP messages from configured agent sources.
 
 ## Requirements
 * 64-bit Windows 10 / Windows 2016 Server or newer.
@@ -147,6 +147,8 @@ SNMP sources and database operation mappings are managed through an XML file tha
             Signal Index .N (see common statistics below)
               Value .1
               Name  .2
+
+    Note that system is currently configured to only respond to V3 SNMP traps.
 
     Flow states: Success, Warning, Alarm, Error, Information, Failover, Synchronize, Reschedule
 
