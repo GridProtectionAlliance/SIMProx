@@ -1,0 +1,9 @@
+theme: jekyll-theme-cayman
+title: GPA.SIMProx
+description: SNMP Proxy Service for Agent Forwarding and Database Operation Targets
+github:
+  repository_name: GridProtectionAlliance.SIMProx
+  owner_url: https://www.gridprotectionalliance.org
+  owner_name: Grid Protection Alliance
+plugins:
+  - jemoji

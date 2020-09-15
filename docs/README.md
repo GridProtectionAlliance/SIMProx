@@ -1,4 +1,4 @@
-![SIMProx](Source/Documentation/Images/SIMProxLogo.png)
+![SIMProx](Images/SIMProxLogo.png)
 
 # About
 
@@ -29,7 +29,7 @@ SIMProx is a Windows service that provides a junction between SNMP V3 traps and 
 
 2) Open zip file and double click on `SIMProxSetup.msi`.
 
-3) Next through first page, accept [MIT license](LICENSE) on next page, and click next again.
+3) Next through first page, accept [MIT license](../LICENSE) on next page, and click next again.
 
 4) On the `Custom Setup` page you can change the target install location if desired.
 
@@ -74,11 +74,11 @@ To change the default configuration of the SIMProx service, run the SIMProx Mana
 
 When the application is running, click the `Configure SIMProx` button on the home page:
 
-![SIMProx Manager Home Screen](Source/Documentation/Images/SIMProxManager_Home.PNG)
+![SIMProx Manager Home Screen](Images/SIMProxManager_Home.PNG)
 
 On the configuration screen, make sure `SNMPHOST!PROCESS` is selected in the adapter list at the bottom of the page. The the `Connection String` section arguments define the options to use for the `SNMP Proxy Host` adapter instance that actually performs the SNMP mapped database and agent forwarding operations.
 
-![SIMProx Manager Config Screen](Source/Documentation/Images/SIMProxManager_Config.PNG)
+![SIMProx Manager Config Screen](Images/SIMProxManager_Config.PNG)
 
 The most important parameter here is the `ConfigFileName` setting that defines the local XML configuration for all the incoming SNMP sources and maps SNMP OIDs to database operations, see the [Example Config File](#example-config-file) below.
 
@@ -110,7 +110,7 @@ The available `DatabaseCommandTemplate` parameter values are as follows:
 
 A helpful application to use while configuring the `SNMP Proxy Host` adapter engine is the SIMProx Console application. Like the manager, this application can be found in the Windows start menu. Run this program now to continue with configuration steps:
 
-![SIMProx Remote Console Screen](Source/Documentation/Images/SIMProxManager_Console.PNG)
+![SIMProx Remote Console Screen](Images/SIMProxManager_Console.PNG)
 
 From the console application you can type `list /a` (or `ls /a`) to show the available adapters.
 
@@ -332,4 +332,4 @@ For OID sources coming from applications based on the Grid Solutions Framework T
 
   This project was created with the Grid Solutions Framework Time-Series Library [Project Alpha](https://github.com/GridProtectionAlliance/projectalpha)
 
-  [![Project Alpha](Source/Documentation/Images/Project-Alpha-Logo_70.png)](https://github.com/GridProtectionAlliance/projectalpha)
+  [![Project Alpha](Images/Project-Alpha-Logo_70.png)](https://github.com/GridProtectionAlliance/projectalpha)
