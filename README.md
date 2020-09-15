@@ -111,7 +111,7 @@ For example, if the `SNMPHOST!PROCESS` adapter has an ID of 2, you can then ente
 
 > If the console is noisy with status information you can enter the `quiet` command (or `q` for short) followed by enter to pause feedback, note that your keyboard input is being accepted even if it is interrupted by messages scrolling by, just keep typing. To restore normal status mode use the `resume` command (or `r` for short). Type `help` to see other available commands.
 
-_For the next configuration step, it is helpful if the console is still visible to the side the SIMProx Manager application so that both tools are visible at the same time._
+_For the next configuration step, it is helpful if the console is still visible to the side of the SIMProx Manager application so that both tools are visible at the same time._
 
 #### Initializing SNMP Proxy Host
 
