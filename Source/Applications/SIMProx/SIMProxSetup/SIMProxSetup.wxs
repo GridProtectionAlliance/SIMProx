@@ -133,7 +133,7 @@
     <CustomAction Id="AuthenticateServiceAccountAction" BinaryKey="InstallerActions" DllEntry="AuthenticateServiceAccountAction" Execute="immediate" />
     <CustomAction Id="LoadExistingCompanyInfoAction" BinaryKey="InstallerActions" DllEntry="LoadExistingCompanyInfoAction" Execute="immediate" />
     <CustomAction Id="StartCSUProcessAction" BinaryKey="InstallerActions" DllEntry="StartProcessAction" Execute="immediate" />
-    <CustomAction Id="CompanyInfoAction.SetProperty" Property="CompanyInfoAction" Value="SERVICENAME=[SERVICENAME];INSTALLDIR=[INSTALLFOLDER];COMPANYNAME=[COMPANYNAME];COMPANYACRONYM=[COMPANYACRONYM]" />
+    <CustomAction Id="CompanyInfoAction.SetProperty" Property="CompanyInfoAction" Value="SERVICENAME=[SERVICENAME];INSTALLDIR=[INSTALLFOLDER];COMPANYNAME=[COMPANYNAME];COMPANYACRONYM=[COMPANYACRONYM];SYSTEMNAME=[SYSTEMNAME]" />
     <CustomAction Id="CompanyInfoAction" BinaryKey="InstallerActions" DllEntry="CompanyInfoAction" Execute="deferred" Impersonate="no" />
     <CustomAction Id="ConfigureServiceAction.SetProperty" Property="ConfigureServiceAction" Value="SERVICENAME=[SERVICENAME]" />
     <CustomAction Id="ConfigureServiceAction" BinaryKey="InstallerActions" DllEntry="ConfigureServiceAction" Execute="deferred" Impersonate="no" />
@@ -400,7 +400,7 @@
         <File Id="HistorianView.exe" Name="HistorianView.exe" Source="$(var.ProjectDir)\HistorianView.exe">
           <netfx:NativeImage Id="ngen_HistorianView.exe" Platform="64bit" Priority="1" AppBaseDirectory="INSTALLFOLDER"/>
         </File>
-        <Shortcut Id="HistorianViewStartMenuShortcut" Name="Historian Trending Tool" Icon="HistorianView.ico.exe" Description="Tool used to analyze historic files to create charts and export archived data to CSV format." WorkingDirectory="INSTALLFOLDER" Directory="ApplicationProgramsFolder" Advertise="yes" />
+        <Shortcut Id="HistorianViewStartMenuShortcut" Name="Historian Trending Tool" Icon="HistorianView.ico.exe" Description="Tool used to analyze historic files to create charts and export data to CSV format." WorkingDirectory="INSTALLFOLDER" Directory="ApplicationProgramsFolder" Advertise="yes" />
       </Component>
       <Component Id="HistorianViewConfig">
         <File Id="HistorianView.exe.config" Name="HistorianView.exe.config" Source="$(var.ProjectDir)\HistorianView.exe.config" />
@@ -638,6 +638,12 @@
       <Component Id="sttp.gsf">
         <File Id="sttp.gsf.dll" Name="sttp.gsf.dll" Source="$(var.SolutionDir)\Dependencies\GSF\sttp.gsf.dll">
           <netfx:NativeImage Id="ngen_sttp.gsf.dll" Platform="64bit" Priority="0" AppBaseDirectory="INSTALLFOLDER"/>
+        </File>
+      </Component>
+
+      <Component Id="ValidateAssemblyBindings">
+        <File Id="ValidateAssemblyBindings.exe" Name="ValidateAssemblyBindings.exe" Source="$(var.SolutionDir)\Dependencies\GSF\ValidateAssemblyBindings.exe">
+          <netfx:NativeImage Id="ngen_ValidateAssemblyBindings.exe" Platform="64bit" Priority="0" AppBaseDirectory="INSTALLFOLDER"/>
         </File>
       </Component>
     </ComponentGroup>
