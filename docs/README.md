@@ -300,6 +300,7 @@ For OID sources coming from applications based on the Grid Solutions Framework T
 | 5&#8209;Subscriber |13|Lifetime Maximum Latency|Maximum latency from output stream, in milliseconds, during the lifetime of the subscriber.|Int32|
 | 5&#8209;Subscriber |14|Lifetime Average Latency|Average latency from output stream, in milliseconds, during the lifetime of the subscriber.|Int32|
 | 5&#8209;Subscriber |15|Up Time|Total number of seconds subscriber has been running.|Double|
+| 5&#8209;Subscriber |16|TLS Secured Channel|Boolean value representing if subscriber command channel has transport layer security enabled.|Boolean|
 | 6&#8209;Publisher |1|Publisher Connected|Boolean value representing if the publisher was continually connected during last reporting interval.|Boolean|
 | 6&#8209;Publisher |2|Connected Clients|Number of clients connected to the command channel of the publisher during last reporting interval.|Int32|
 | 6&#8209;Publisher |3|Processed Measurements|Number of processed measurements reported by the publisher during last reporting interval.|Int32|
@@ -313,6 +314,7 @@ For OID sources coming from applications based on the Grid Solutions Framework T
 | 6&#8209;Publisher |11|Lifetime Maximum Latency|Maximum latency from output stream, in milliseconds, during the lifetime of the publisher.|Int64 (as String)|
 | 6&#8209;Publisher |12|Lifetime Average Latency|Average latency from output stream, in milliseconds, during the lifetime of the publisher.|Int64 (as String)|
 | 6&#8209;Publisher |13|Up Time|Total number of seconds publisher has been running.|Double|
+| 6&#8209;Publisher |14|TLS Secured Channel|Boolean value representing if publisher command channel has transport layer security enabled.|Boolean|
 | 7&#8209;Process |1|CPU Usage|Percentage of CPU currently used by the launched process.|Double|
 | 7&#8209;Process |2|Memory Usage|Amount of memory currently used by the launched process in megabytes.|Double|
 | 7&#8209;Process |3|Up Time|Total number of seconds the launched process has been running.|Double|
