@@ -570,7 +570,7 @@ namespace ConfigurationSetupUtility.Screens
 
             Dictionary<string, string> remoteStatusServerSettings;
             string remoteStatusServerConnectionString;
-            string alarmServiceUrl;
+            //string alarmServiceUrl;
 
             try
             {
